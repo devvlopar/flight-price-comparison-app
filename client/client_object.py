@@ -21,7 +21,7 @@ def get_airport(request):
             data = json.dumps(data_list)                                     
         except ResponseError as error:
             messages.add_message(request, messages.ERROR, error.response.result['errors'][0]['detail'])
-    print(term,data_list)
+
     return HttpResponse(data, 'application/json')
 
 

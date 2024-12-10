@@ -68,17 +68,26 @@ def is_cheapest_flight_out_of_range(cheapest_flight_price, metrics):
     elif cheapest_flight_price_to_number > max_price:
         metrics['max'] = cheapest_flight_price
 
-
+direct_flights_not_available = None
 def get_flight_offers(**kwargs):
+    global direct_flights_not_available 
     print('before API')
     search_flights = amadeus_client.shopping.flight_offers_search.get(**kwargs)
-    flight_offers = []
     
-    # print(search_flights.data)
+    #check if direct flights are not avail but via are available
+    if not search_flights.data and (kwargs.get('nonStop') == "true"):
+        kwargs['nonStop'] = 'false'
+        search2 = amadeus_client.shopping.flight_offers_search.get(**kwargs)
+        if len(search2.data) != 0:
+            direct_flights_not_available = "There are no direct flights available for this route."
+            
+    
+    
+    flight_offers = []
     for flight in search_flights.data:
         offer = Flight(flight).construct_flights()
         flight_offers.append(offer)
-    print('AFTER')
+    # print('AFTER')
     
     return flight_offers
 
@@ -86,7 +95,7 @@ def get_flight_offers(**kwargs):
 def get_flight_price_metrics(**kwargs_metrics):
 
     metrics = amadeus_client.analytics.itinerary_price_metrics.get(**kwargs_metrics)
-    # print(metrics.data)
+    print("METRICS DATA COMING FROM THE API CALL FROM THE SERVER", " --------------> ",metrics.data)
     # print(Metrics(metrics.data).construct_metrics())
     return Metrics(metrics.data).construct_metrics()
 
@@ -101,7 +110,7 @@ def search_flight_view(request):
     return_date = request.POST.get('Returndate')
     cabin_class = request.POST.get('Cabinclass')
     direct_flight ="true" if request.POST.get('directFlights') == "on" else "false"
-    print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", direct_flight)
+    
     
     
     if request.session.get('user_email'):
@@ -174,7 +183,9 @@ def search_flight_view(request):
                       }
         if return_date:
             kwargs_metrics['oneWay'] = "false"
+        print("SEARCHING METRICS FOR THESE PARAMS --------------------->   ", kwargs_metrics)
         metrics = get_flight_price_metrics(**kwargs_metrics)
+        
         #price metrics not available
         if not metrics:
             return render(request, 'results_without_login.html', {'is_good_deal': 'nometrics'})
@@ -528,31 +539,36 @@ def get_flight_data(request):
     print(kwargs)
    
     if origin and destination and departure_date:
+        is_good_deal = ''
+        context = {
+                
+                'origin'  : origin,
+                'destination': destination,
+                'departure_date': departure_date,
+                'return_date': return_date,
+                
+                
+                
+                'currency_symbol': currency['currency_symbol'],
+                
+                'direct_flights_not_available': direct_flights_not_available
+                }
         try:
             flight_offers = get_flight_offers(**kwargs)
+            context['flight_offers'] = flight_offers
         except:
             flight_offers = []
             metrics = get_flight_price_metrics(**kwargs_metrics)
             cheapest_flight = get_cheapest_flight_price(flight_offers)
-            is_good_deal = ''
+            context['cheapest_flight'] = cheapest_flight
             if metrics is not None:
                 is_good_deal = rank_cheapest_flight(cheapest_flight, metrics['first'], metrics['third'])
                 is_cheapest_flight_out_of_range(cheapest_flight, metrics)
-        
+                context['metrics'] = metrics
+                context['is_good_deal'] = is_good_deal
             else: 
                 is_good_deal = "DATA NT"
-            return JsonResponse({
-                        'flight_offers': flight_offers,
-                        'origin'  : origin,
-                        'destination': destination,
-                        'departure_date': departure_date,
-                        'return_date': return_date,
-                        'metrics': metrics,
-                        'cheapest_flight': cheapest_flight,
-                        'is_good_deal': is_good_deal,
-                        'currency_symbol': currency['currency_symbol'],
-                        'cheapest_flight': cheapest_flight,
-                        })
+            return JsonResponse(context)
             
         
        
@@ -582,7 +598,8 @@ def get_flight_data(request):
                         'cheapest_flight': cheapest_flight,
                         'is_good_deal': is_good_deal,
                         'currency_symbol': currency['currency_symbol'],
-                        'cheapest_flight': cheapest_flight
+                        'cheapest_flight': cheapest_flight,
+                        'direct_flights_not_available' : direct_flights_not_available
                         })
 
 
