@@ -77,9 +77,9 @@ def get_flight_offers(**kwargs):
     #check if direct flights are not avail but via are available
     if not search_flights.data and (kwargs.get('nonStop') == "true"):
         kwargs['nonStop'] = 'false'
-        search2 = amadeus_client.shopping.flight_offers_search.get(**kwargs)
-        if len(search2.data) != 0:
-            direct_flights_not_available = "There are no direct flights available for this route."
+        # search2 = amadeus_client.shopping.flight_offers_search.get(**kwargs)
+        # if len(search2.data) != 0:
+        #     direct_flights_not_available = "There are no direct flights available for this route."
             
     
     
