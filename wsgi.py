@@ -1,0 +1,1 @@
+from flightanalysis.wsgi import application

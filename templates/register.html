@@ -1,0 +1,247 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+    <title>Flight Checker: Register</title>
+
+    <style>
+        /* Style for the popup container */
+        .popup {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            height: 70%; /* Fixed height for the popup */
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            overflow: auto;
+        }
+
+        /* Style for the close button */
+        .close-btn {
+            background-color: white;
+            color: black;
+            border: 1px;
+            padding: 10px;
+            cursor: pointer;
+            float: right;
+            font-weight: bold;
+        }
+
+        /* Style for the overlay (background dimming effect) */
+        .overlay {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Style for the content inside the popup */
+        .popup-content {
+            max-height: calc(100% - 60px); /* Subtracting space for close button and padding */
+            overflow-y: auto; /* Enable vertical scrolling */
+            padding-right: 20px; /* Add space for the scrollbar */
+        }
+
+ 
+    </style>
+
+</head>
+
+<body>
+    
+    {% include "header.html" %}
+
+    <section class="ct-banner-section banner-decrease-h">
+        <div class="container">
+            <div class="position-relative w-100">
+                <h1 class="ct-main-title ">
+                    Register Free
+                </h1>
+            </div>
+        </div>
+    </section>
+
+    <section class="register-form-section">
+        <div class="container">
+            <div class="register-f">
+                <div class="re-card-header">
+                    <h3 class="mb-0"> Register</h3>
+                </div>
+                
+                
+                <div class="re-card-body position-relative pt-85">
+                    {% if message %}
+                        <div class="show-alert-data">
+                        {% if message == "Account Created Successfully!" %}
+                            <div class="alert alert-success text-center" role="alert">
+                                <label class="mb-0"> {{message}}</label>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-danger text-center" role="alert">
+                                <label class="mb-0"> {{message}}</label>
+                            </div>
+                        {% endif %}
+                        </div>
+                    {% endif %}
+                   
+                    
+                     <form class="w-100" action="{% url 'register' %}" method="post" >
+                        {% csrf_token %}
+                        
+                        <div class="form-group d-flex align-items-center ">
+                            <label class="mb-0">First Name</label>
+                            <input type="text" name="first_name" placeholder="Enter First Name" class="form-control" required>
+                        </div>
+                        <div class="form-group d-flex align-items-center ">
+                            <label class="mb-0">Last Name</label>
+                            <input type="text" name="last_name" placeholder="Enter Last Name" class="form-control" required >
+                        </div>
+                        <div class="form-group d-flex align-items-center ">
+                            <label class="mb-0">Email Address</label> 
+                            
+
+                                <input type="email" name="email" placeholder="Enter Email Address" class="form-control w-100" required>
+                                
+                            
+                        </div>
+                        <div class="form-group d-flex align-items-center ">
+                            <label class="mb-0">Confirm Email Address</label>
+                            <input type="email" name="confirm_email" placeholder="Enter Email Address again" class="form-control" required>
+                        </div>
+                        <div class="form-group d-flex align-items-center ">
+                            <label class="mb-0">Password</label>
+                            <input type="password" name="password"  placeholder="Enter Password" class="form-control" required>
+                        </div>
+                        <div class="form-group d-flex align-items-center ">
+                            <label class="mb-0">Confirm Password</label>
+                            <input type="password" name="confirm_password"  placeholder="Enter Password again"  class="form-control" required>
+                        </div>
+                        <div class="g-recaptcha form-group d-flex align-items-left" data-sitekey="6LcfU4sqAAAAAPO5Zu94gVWjiuVU87oyOaexTAoa"></div>
+                        <div class="w-100 re-form-check">
+                            <div class="w-100 d-flex align-items-center gap-2 mb-2">
+                                <input id="receive-email-updates" name="receive-email-updates" type="checkbox">
+
+                                <label for="receive-email-updates" class="mb-0">Receive email updates
+                                </label>
+                            </div>
+                            <div class="w-100 d-flex align-items-center gap-2 mb-2">
+                                <input id="accept-website-conditions" name="accept-website-conditions" type="checkbox" required>
+
+                                <label for="accept-website-conditions" class="mb-0">Accept website conditions 
+                                    <a id="popup-trigger" style="color:blue; cursor:pointer;">README</a>
+                                </label>
+                            </div>
+                            
+                        </div>
+                        <div class="w-100 mt-5 d-flex justify-content-end">
+                            <button type="submit" class="ct-btn-register">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- The popup window -->
+    <div class="popup" id="popup">
+        <button class="close-btn" id="close-btn">X</button>
+        <img src="{% static '/images/dark_logo.png' %}" style="max-width: 700px; width:100%; border-radius: 5px;" >
+        <br>
+        <h2 style="font-weight: bold;" >Conditions for website use</h2>
+        <p>Welcome to FlightChkr.com.
+            <br></br>
+            If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern FlightChkr.com’s relationship with you in relation to this website. 
+            <br><br>
+            If you disagree with any part of these terms and conditions, please do not use our website.
+            The term ‘FlightChkr.com’ or ‘us’ or ‘we’ refers to the owner of the website being Travel Directions Pty Ltd (Australia) whose trading address is Level 19, 10 Eagle Street, Brisbane QLD Australia 4000 ACN:611 467 255. The term ‘you’ refers to the user or viewer of our website.
+            <br><br>
+            The use of this website is subject to the following terms of use:
+            <br><br>
+            The content of the pages of this website is for your general information and use only. It is subject to change without notice.
+            <br><br>
+            Neither we nor any third parties provide any warranty or guarantee as to the accuracy, timeliness, performance, completeness or suitability of the information and materials found or offered on this website for any particular purpose. 
+            <br><br>
+            You acknowledge that such information and materials may contain inaccuracies or errors, and we expressly exclude liability for any such inaccuracies or errors to the fullest extent permitted by law.
+            <br><br>
+            Your use of any information or materials on this website is entirely at your own risk, for which we shall not be liable. It shall be your own responsibility to ensure that any products, services or information available through this website meet your specific requirements.
+            <br><br>
+            This website contains material which is owned by or licensed to us. This material includes, but is not limited to, the design, layout, look, appearance and graphics. Reproduction is prohibited other than in accordance with the copyright notice, which forms part of these terms and conditions.
+            All trademarks reproduced in this website, which are not the property of, or licensed to the operator, are acknowledged on the website.
+            <br><br>
+            Unauthorised use of this website may give rise to a claim for damages and/or be a criminal offence.
+            <br><br>
+            From time to time, this website may also include links to other websites. These links are provided for your convenience to provide further information. They do not signify that we endorse the website(s). We have no responsibility for the content of the linked website(s).
+            Your use of this website and any dispute arising out of such use of the website is subject to the laws of Queensland, Australia.
+            <br><br>
+            <b style="font-size: 20px;" >
+            Use of browsing cookies
+            </b>
+            <br><br>
+            This website does not currently use browsing cookies to store user information. 
+            </br>
+            
+            (Please close this page to continue.)</p>
+    </div>
+
+    "{% include 'footer.html' %}"
+    
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script>
+        // Get the elements
+        const popupTrigger = document.getElementById("popup-trigger");
+        const popup = document.getElementById("popup");
+        const closeBtn = document.getElementById("close-btn");
+        const overlay = document.getElementById("overlay");
+
+        // Function to open the popup
+        popupTrigger.addEventListener("click", function() {
+            popup.style.display = "block"; // Show the popup
+            overlay.style.display = "block"; // Show the overlay
+        });
+
+        // Function to close the popup
+        closeBtn.addEventListener("click", function() {
+            popup.style.display = "none"; // Hide the popup
+            overlay.style.display = "none"; // Hide the overlay
+        });
+
+        // Close popup if the overlay is clicked
+        overlay.addEventListener("click", function() {
+            popup.style.display = "none";
+            overlay.style.display = "none";
+        });
+    </script>
+
+</body>
+
+</html>

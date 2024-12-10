@@ -1,0 +1,459 @@
+
+<div class="col-lg-6">
+    <div>
+        <h3 class="text-black mb-4">
+            Flights:
+        </h3>
+
+        {% for flight in flight_offers %}
+
+        <div class="card mb-3">
+            <div class="card-header text-center">
+                <span class="d-block text-20 text-red">
+                    ${{flight.price}}
+                </span>
+            </div>
+            <div class="card-body  ">
+                <spa class="d-block mb-3 font-weight-normal text-center w-100">
+                    <span class="d-block-inline text-20 text-light-blue">
+                        Departure
+                    </span>
+                    Total duration {{flight.0FlightTotalDuration}}
+                </spa>
+                <div class="departure-card-body w-100 mx-auto">
+                    <div class="d-flex align-items-center gap-2 departure-box">
+                        <div class="departure-img">
+                            <img src="{{flight.0firstFlightAirlineLogo}}" alt="logo" class="w-100 h-100">
+                        </div>
+                        <div class="d-flex align-items-center gap-1">
+                            <span class="text-black text-20 d-block-inline">
+                                {{flight.0firstFlightDepartureDate}} {{flight.0firstFlightDepartureAirport}}
+                            </span>
+                            <span class="d-block-inline h2 text-light-blue">
+                                &rarr;
+                            </span>
+                            <span class="text-black text-20 d-block-inline">
+                                {{flight.0firstFlightArrivalDate}} {{flight.0firstFlightArrivalAirport}}
+                            </span>
+                        </div>
+                        {% if r.0secondFlightDepartureAirport %}
+                            <p class="nounderline elegantstyle">Connection duration is {{ r.0stop_time }}</p>
+                            <h4><img src={{ r.0secondFlightAirlineLogo }} alt={{ r.0secondFlightAirline }}> {{ r.0secondFlightDepartureDate }} {{ r.0secondFlightDepartureAirport }}
+                                <a href="#" data-toggle="tooltip" class="nounderline text-info" title={{ r.0secondFlightArrivalDuration }} duration>&#10230</a> {{ r.0secondFlightArrivalAirport }} {{ r.0secondFlightArrivalDate }}</h4>
+                        {% endif %}
+                        {% if r.1firstFlightDepartureAirport %}
+                    </div>
+                    
+                    <!-- <span class="d-block text-black text-center my-3">
+                        Connection Duration is 11:5
+                    </span>
+                    <div class="d-flex align-items-center gap-2 departure-box">
+                        <div class="departure-img">
+                            <img src="./images/tap-logo.jpg" alt="logo" class="w-100 h-100">
+                        </div>
+                        <div class="d-flex align-items-center gap-1">
+                            <span class="text-black text-20 d-block-inline">
+                                19:45 LIS
+                            </span>
+                            <span class="d-block-inline h2 text-light-blue">
+                                &rarr;
+                            </span>
+                            <span class="text-black text-20 d-block-inline">
+                                SFO 14:45
+                            </span>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        
+        {% endfor %}
+
+        <!-- <div class="card mb-3">
+            <div class="card-header text-center">
+                <span class="d-block text-20 text-red">
+                     ${{flight.price}} 
+                </span>
+            </div>
+            <div class="card-body  ">
+                <spa class="d-block mb-3 font-weight-normal text-center w-100">
+                    <span class="d-block-inline text-20 text-light-blue">
+                        Departure
+                    </span>
+                     Total duration {{flight.0FlightTotalDuration}} 
+                </spa>
+                <div class="departure-card-body w-100 mx-auto">
+                    <div class="d-flex align-items-center gap-2 departure-box">
+                        <div class="departure-img">
+                            <img src="images/tap-logo.jpg" alt="logo" class="w-100 h-100">
+                        </div>
+                        <div class="d-flex align-items-center gap-1">
+                            <span class="text-black text-20 d-block-inline">
+                                19:55 LHR
+                            </span>
+                            <span class="d-block-inline h2 text-light-blue">
+                                &rarr;
+                            </span>
+                            <span class="text-black text-20 d-block-inline">
+                                LIS 22:40
+                            </span>
+                        </div>
+                    </div>
+                    <span class="d-block text-black text-center my-3">
+                        Connection Duration is 11:5
+                    </span>
+                    <div class="d-flex align-items-center gap-2 departure-box">
+                        <div class="departure-img">
+                            <img src="./images/tap-logo.jpg" alt="logo" class="w-100 h-100">
+                        </div>
+                        <div class="d-flex align-items-center gap-1">
+                            <span class="text-black text-20 d-block-inline">
+                                19:45 LIS
+                            </span>
+                            <span class="d-block-inline h2 text-light-blue">
+                                &rarr;
+                            </span>
+                            <span class="text-black text-20 d-block-inline">
+                                SFO 14:45
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+    </div>
+</div>
+<div class="col-lg-6">
+    <div>
+        <h3 class="mb-4 text-black">
+            Analysis:
+        </h3>
+        <p class="mb-3 font-weight-midd text-20 text-gray">
+            The cheapest Available fight is <span class="d-block-inline text-light-blue h5">{{is_good_deal}}
+            </span>
+        </p>
+        <p class="mb-3 font-weight-midd text-20 text-gray">
+            The Least expensive flights usually cost between $364.27 - 495.88
+        </p>
+        <div class="slider-wrapper-range">
+            <div id="employees"></div>
+        </div>
+    </div>
+</div>
+
+// {% if r.0secondFlightDepartureAirport %}
+//     <p class="nounderline elegantstyle">Connection duration is {{ r.0stop_time }}</p>
+//     <h4><img src={{ r.0secondFlightAirlineLogo }} alt={{ r.0secondFlightAirline }}> {{ r.0secondFlightDepartureDate }} {{ r.0secondFlightDepartureAirport }}
+//         <a href="#" data-toggle="tooltip" class="nounderline text-info" title={{ r.0secondFlightArrivalDuration }} duration>&#10230</a> {{ r.0secondFlightArrivalAirport }} {{ r.0secondFlightArrivalDate }}</h4>
+// {% endif %}
+// {% if r.1firstFlightDepartureAirport %}
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Show the loader
+        document.getElementById('loader').style.display = 'block';
+
+        // Get the search parameters from the URL
+        const params = new URLSearchParams(window.location.search);
+
+        // Get the Django variables safely from the template and parse them to JavaScript variables
+      // Get search parameters from the Django template
+            const origin = "{{ origin }}";
+            const destination = "{{ destination }}";
+            const departureDate = "{{ departure_date }}";
+            const returnDate = "{{ return_date }}";
+            const cabinClass = "{{ cabin_class }}";
+            const metrics = "{{metrics}}";
+            const cheapest_flight = "{{cheapest_flight}}";
+        // Send an AJAX request to fetch flight data
+        fetch(`/get_flight_data/?origin=${origin}&destination=${destination}&departure_date=${departureDate}&return_date=${returnDate}`)
+            .then(response => response.json())
+            .then(data => {
+                
+                document.getElementById('loader').style.display = 'none';
+
+            // Create a container for flight results
+            const resultsContainer = document.getElementById("flight-results");
+
+            if (data.flight_offers) {
+                data.flight_offers.forEach(flight => {
+                    const cardDiv = document.createElement('div');
+                    cardDiv.classList.add('card', 'mb-3', 'm-4');
+                    
+                    const cardHeader = document.createElement('div');
+                    cardHeader.classList.add('card-header', 'text-center');
+                    const priceSpan = document.createElement('span');
+                    priceSpan.classList.add('d-block', 'text-20', 'text-red');
+                    priceSpan.textContent = `$ ${flight.price}`;
+                    cardHeader.appendChild(priceSpan);
+                    cardDiv.appendChild(cardHeader);
+
+                    const cardBody = document.createElement('div');
+                    cardBody.classList.add('card-body');
+
+                    const departureInfo = document.createElement('span');
+                    departureInfo.classList.add('d-block', 'mb-3', 'font-weight-normal', 'text-center');
+                    departureInfo.innerHTML = `<span class="d-block-inline text-20 text-light-blue">Departure</span>
+                                               Total duration ${flight['0FlightTotalDuration']}`;
+                    cardBody.appendChild(departureInfo);
+
+                    const departureCardBody = document.createElement('div');
+                    departureCardBody.classList.add('departure-card-body', 'w-100', 'mx-auto');
+                    const departureBox = document.createElement('div');
+                    departureBox.classList.add('d-flex', 'align-items-center', 'gap-2', 'departure-box');
+                    
+                    const departureImg = document.createElement('div');
+                    departureImg.classList.add('departure-img');
+                    const img = document.createElement('img');
+                    img.src = flight['0firstFlightAirlineLogo'];
+                    img.alt = "logo";
+                    img.classList.add('w-100', 'h-100');
+                    departureImg.appendChild(img);
+
+                    const departureDetails = document.createElement('div');
+                    departureDetails.classList.add('d-flex', 'align-items-center', 'gap-1');
+                    departureDetails.innerHTML = `
+                        <span class="text-black text-20">${flight['0firstFlightDepartureDate']} ${flight['0firstFlightDepartureAirport']}</span>
+                        <span class="d-block-inline h2 text-light-blue">&rarr;</span>
+                        <span class="text-black text-20">${flight['0firstFlightArrivalDate']} ${flight['0firstFlightArrivalAirport']}</span>
+                    `;
+                    departureBox.appendChild(departureImg);
+                    departureBox.appendChild(departureDetails);
+                    departureCardBody.appendChild(departureBox);
+
+                    cardBody.appendChild(departureCardBody);
+                    cardDiv.appendChild(cardBody);
+
+                    // Append the complete card to the results container
+                    resultsContainer.appendChild(cardDiv);
+
+
+                   
+
+                });
+            } else {
+                console.log("No flight offers available.");
+            }
+
+
+           
+            });
+
+});
+                
+
+
+                        
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<div class="col-lg-6" id="price-slider" > 
+                       
+                   
+    <h3 class="mb-4 text-black">
+        Analysis:
+    </h3>
+    
+    <div>
+        <p class="mb-3 font-weight-midd text-20 text-gray">
+            The cheapest Available fight is <span class="d-block-inline text-light-blue h5">{{ is_good_deal }}
+            </span>
+        </p>
+        <p class="mb-3 font-weight-midd text-20 text-gray">
+            The Least expensive flights usually cost between $364.27 - 495.88
+        </p>
+        <div class="slider-wrapper-range">
+            <div id="employees"></div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+<h3 class="mb-4 text-black">
+    Analysis:
+</h3>
+
+<div>
+    <p class="mb-3 font-weight-midd text-20 text-gray">
+        The cheapest Available fight is <span class="d-block-inline text-light-blue h5">{{ is_good_deal }}
+        </span>
+    </p>
+    <p class="mb-3 font-weight-midd text-20 text-gray">
+        The Least expensive flights usually cost between $364.27 - 495.88
+    </p>
+    <div class="slider-wrapper-range">                              
+        <div id="employees"></div>
+    </div>
+</div>
+
+
+
+
+const finalDocument = document.getElementById("price-slider");
+        const h3p = document.createElement('h3');
+        h3p.textContent = `Analysis: `;
+        h3p.classList.add('mb-4', 'text-black');
+        finalDocument.appendChild(h3p);
+        
+        const divd1 = document.createElement('div');
+        const p1 = document.createElement('p');
+        p1.classList.add('mb-3', 'font-weight-midd', 'text-20', 'text-gray');
+
+        if(metrics){
+        p1.textContent = `The cheapest Available fight is `;
+        divd1.appendChild(p1);
+        const s1 = document.createElement('span');
+        s1.classList.add('d-block-inline', 'text-light-blue', 'h5');
+        s1.textContent = ` ${isGoodDeal} `;
+        p1.appendChild(s1);
+        const p2 = document.createElement('p');
+        p2.classList.add('mb-3', 'font-weight-midd', 'text-20', 'text-gray');
+        p2.textContent = `The Least expensive flights usually cost between $ ${metrics.first} - ${metrics.third}`
+        divd1.appendChild(p2);
+
+        const theUIDiv = document.createElement('div');
+        theUIDiv.classList.add('slider-wrapper-range');
+        const theInnerDiv = document.createElement('div');
+        theInnerDiv.id = "employees";
+        theUIDiv.appendChild(theInnerDiv);
+        divd1.appendChild(theUIDiv);
+        finalDocument.appendChild(divd1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        const employees = document.querySelector("#employees");
+        let aTen = (metrics.max - metrics.min) * 0.2;
+
+        const labels = { 0: `$ ${metrics.min}`, 20: `$ ${metrics.min + aTen}:.2f`, 40: `$ ${metrics.min + aTen + aTen}`, 60: `$ ${metrics.max - aTen - aTen}`, 80: `$ ${metrics.max - aTen - aTen}`, 100: `$ ${metrics.max}` };
+
+        // Create the slider
+        noUiSlider.create(employees, {
+            start: [20, 80], // Two handles
+            connect: [true, true, false], // Define connections
+            tooltips: [
+                {
+                    to: function (value) {
+                        return value > metrics.max ? `$ ${metrics.max}` : "$" + parseInt(value);
+                    }
+                },
+                {
+                    to: function (value) {
+                        return value > metrics.max ? `$ ${metrics.max}` : "$" + parseInt(value);
+                    }
+                }
+            ],
+            range: {
+                'min': 0,
+                
+                '20%': 20,
+                
+                '40%': 40,
+                
+                '60%': 60,
+                
+                '80%': 80,
+                
+                'max': 100
+            },
+            pips: {
+                mode: 'steps',
+                filter: function (value, type) {
+                    return type === 0 ? -1 : 1;
+                },
+                format: {
+                    to: function (value) {
+                        return labels[value];
+                    }
+                }
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="container">
+            <div class="tabs">
+                <div class="tab active" onclick="showTab(1)">About Us</div>
+                <div class="tab" onclick="showTab(2)">Privacy</div>
+            </div>
+            <div class="tab-content active" id="tab-1">
+                <h2>Who we are & what we do</h2>
+                <p>Travel Directions is a travel agency company based in Brisbane Australia. Our main business is organizing travel for clients, in particular for members of our Australian Escapes Holiday & Travel Club.</p>
+                <p>International travel makes up the majority of what we do. Flight booking is, of course, a big part of that.</p>
+                <h3>History of FlightChkr.com</h3>
+                <p>The greatest challenge with flight booking for us as travel agents is keeping within the budget created when the trip was priced for the client...</p>
+                <p>Flight prices fluctuate continuously because of the use of dynamic (demand-based) pricing systems which can cause us significant headaches...</p>
+                <p><strong>The FlightChkr.com system will help you make an informed decision about when to book...</strong></p>
+            </div>
+            <div class="tab-content" id="tab-2">
+                <h2>Privacy Policy</h2>
+                <p>Travel Directions Pty Ltd t/as FlightChkr.com is committed to providing quality services to you, and this policy outlines our ongoing obligations to you in respect of how we manage your Personal Information.</p>
+                <h3>Personal Information and Why We Collect It</h3>
+                <p>Personal Information is information or an opinion that identifies an individual. Examples of Personal Information we collect include names, addresses, email addresses, and phone numbers...</p>
+                <h3>Sensitive Information</h3>
+                <p>Sensitive information will be used by us only for the primary purpose for which it was obtained...</p>
+                <h3>Disclosure of Personal Information</h3>
+                <p>Your Personal Information may be disclosed in a number of circumstances, including the following:</p>
+                <ul>
+                    <li>Third parties where you consent to the use or disclosure</li>
+                    <li>Where required or authorized by law</li>
+                </ul>
+            </div>
+        </div>
+        <script>
+            function showTab(tabIndex) {
+                const tabs = document.querySelectorAll('.tab');
+                const contents = document.querySelectorAll('.tab-content');
+                tabs.forEach((tab, index) => {
+                    tab.classList.toggle('active', index + 1 === tabIndex);
+                    contents[index].classList.toggle('active', index + 1 === tabIndex);
+                });
+            }
+        </script>

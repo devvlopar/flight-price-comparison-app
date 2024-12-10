@@ -1,0 +1,325 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+    <title>Flight Checker: About</title>
+</head>
+
+<body>
+   {% include 'header.html' %}
+    <div class="main-content-div">
+        <div class="w-100">
+            <section class="ct-banner-section banner-decrease-h">
+                <div class="container">
+                    <div class="position-relative w-100">
+                        <h1 class="ct-main-title ">
+                            About
+                        </h1>
+                    </div>
+                </div>
+            </section>
+            <section class="about-tabs-section my-5">
+                <div class="container">
+                    <ul class="nav nav-pills mb-5 w-100" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="about-us-tab" data-toggle="pill" href="#about-us" role="tab"
+                                aria-controls="about-us" aria-selected="true">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="privacy-tab" data-toggle="pill" href="#privacy" role="tab"
+                                aria-controls="privacy" aria-selected="false">Privacy</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="about-us" role="tabpanel"
+                            aria-labelledby="about-us-tab">
+                            <div class="my-4 w-100">
+                                <h3 class="mb-3 text-black">
+                                    Who we are & what we do
+                                </h3>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    Travel Directions is a travel agency company based in Brisbane Australia. Our main
+                                    business is organizing travel for clients, in particular for members of our
+                                    Australian
+                                    Escapes Holiday & Travel Club.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    International travel makes up the majority of what we do. Flight booking is, of
+                                    course, a big part of that.
+                                </p>
+                            </div>
+                            <div class="my-4 w-100">
+                                <h3 class="mb-3 text-black">
+                                    History of FlightChkr.com
+                                </h3>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    The greatest challenge with flight booking for us as travel agents is keeping within
+                                    the budget created when the trip was priced for the client.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    Flight prices fluctuate continuously because of the use of dynamic (demand-based)
+                                    pricing systems which can cause us significant headaches
+                                </p>
+                                <h4 class="mb-3 text-black pt-2">
+                                    For example:
+                                </h4>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    We might price flights for a client a week or two before they agree to proceed, pay
+                                    their deposit and provide passport (name) details. When it comes time to book the
+                                    flights, the prices might have increased by 20% or more. We know that lower prices
+                                    might be possible because we found lower prices previously.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    So, we wait until the prices come back into line with the budget. That happens 95%
+                                    of the time. The 5% is usually premium seats (premium economy and business) which
+                                    sell out more quickly that economy, and remaining seats are maintained at high
+                                    minimum prices.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    We know from experience that flights will start adjusting 55 to 115 days in advance.
+                                    But it is time consuming checking those prices regularly.
+                                </p>
+                                <div class="w-100">
+                                    <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                        The development of FlightChkr.com follows the need to have a way of being able
+                                        to know the following regarding a flight:
+                                    </p>
+                                    <ul class="w-100 ml-md-5">
+                                        <li class="text-18 text-black font-weight-bold mb-2">
+                                            (a) What should the price be?
+                                        </li>
+                                        <li class="text-18 text-black font-weight-bold mb-2">
+                                            (b) Where are we now?
+                                        </li>
+                                        <li class="text-18 text-black font-weight-bold mb-2">
+                                            (c) Should we wait?
+                                        </li>
+                                    </ul>
+                                    <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                        The FlightChkr.com system helps us make an informed decision about when to book.
+                                        Automated price checking is a coming feature.
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="my-4 w-100">
+                                <h3 class="mb-3 text-black">
+                                    The challenge for you
+                                </h3>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    When you look at flight prices for a trip, especially international flights, you
+                                    have no idea whether the price is reasonable or inflated. Unless you regularly book
+                                    that same flight, you are at a complete disadvantage.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    The result, much to the delight of airlines, is high profits because people pay too
+                                    much for flights through a lack of information.
+                                </p>
+                                <p class="mb-3 font-weight-bold text-20 text-black text-18">
+                                    Your challenge is the same as ours… Knowing what a reasonable price is, and when to
+                                    book.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    Is the current price the lowest it will go? Or should I wait?
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    The FlightChkr.com system will help you make an informed decision about when to
+                                    book. It uses a vast amount of historical flight price data along with AI to analyse
+                                    current prices.
+                                </p>
+
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    If you do a search and the indicator says the lowest available price is a GOOD DEAL
+                                    you know that now is the right time to book.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    However, if the indicator show that the price is too high, then you can decide on
+                                    the best course of action. You might have no choice but to book now. But in most
+                                    cases, you can wait, especially if you are booking at least three months out.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    Many people get nervous about waiting to book for fear of not getting seats. Unless
+                                    you are booking in a peak travel period and/or the number of airlines offering fares
+                                    is very limited, you will usually have options.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    Go onto the websites for your preferred airlines and check the available seating for
+                                    the most suitable flights. This can usually be done during the booking process
+                                    before payment, so you can cancel out before going that far.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    If there are plenty of seats and you have a few months to go before departure, you
+                                    have no need for concern. A final decision should be made no later than 30 to 45
+                                    days before departure. After this time, airlines move prices up to maximize profits
+                                    from the less price-sensitive business market.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    All the best from the FlightChkr.com team.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="privacy" role="tabpanel" aria-labelledby="privacy-tab">
+                            <div class="my-4 w-100">
+                                <h3 class="mb-3 text-black">
+                                    Privacy policy
+                                </h3>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    Travel Directions Pty Ltd t/as FlightChkr.com is committed to providing quality
+                                    services to you and this policy outlines our ongoing obligations to you in respect
+                                    of how we manage your Personal Information.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    We have adopted the Australian Privacy Principles (APPs) contained in the Privacy
+                                    Act 1988 (Cth) (the Privacy Act). The NPPs govern the way in which we collect, use,
+                                    disclose, store, secure and dispose of your Personal Information.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    A copy of the Australian Privacy Principles may be obtained from the website of The
+                                    Office of the Australian Information Commissioner at www.aoic.gov.au
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    PERSONAL INFORMATION AND WHY WE COLLECT IT
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    Personal Information is information or an opinion that identifies an individual.
+                                    Examples of Personal Information we collect include: names, addresses, email
+                                    addresses and phone numbers.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    This Personal Information is obtained in many ways including interviews,
+                                    correspondence, telephone, email, via our website and from third parties. We don’t
+                                    guarantee website links or policy of authorised third parties.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    We collect your Personal Information for the primary purpose of providing our
+                                    services to you, providing information to our clients and marketing. We may also use
+                                    your Personal Information for secondary purposes closely related to the primary
+                                    purpose, in circumstances where you would reasonably expect such use or disclosure.
+                                    You may unsubscribe from our mailing/marketing lists at any time by contacting us in
+                                    writing.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    When we collect Personal Information we will, where appropriate and where possible,
+                                    explain to you why we are collecting the information and how we plan to use it.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    SENSITIVE INFORMATION
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    Sensitive information is defined in the Privacy Act to include information or
+                                    opinion about such things as an individual's racial or ethnic origin, political
+                                    opinions, membership of a political association, religious or philosophical beliefs,
+                                    membership of a trade union or other professional body, criminal record or health
+                                    information.
+                                </p>
+                                <div class="w-100">
+                                    <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                        Sensitive information will be used by us only:
+                                    </p>
+                                    <ul class="w-100 ml-md-5 pl-md-0 pl-3">
+                                        <li class="h5 text-black font-weight-bold mb-2">
+                                            For the primary purpose for which it was obtained
+                                        </li>
+                                        <li class="h5 text-black font-weight-bold mb-2">
+                                            For a secondary purpose that is directly related to the primary purpose
+                                        </li>
+                                        <li class="h5 text-black font-weight-bold mb-2">
+                                            With your consent, or where required or authorised by law.
+                                        </li>
+                                    </ul>
+                                    <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                        THIRD PARTIES
+                                    </p>
+                                </div>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">Where reasonable and
+                                    practicable to do so, we will collect your Personal Information only from you.
+                                    However, in some circumstances we may be provided with information by third parties.
+                                    In such a case we will take reasonable steps to ensure that you are made aware of
+                                    the information provided to us by the third party.</p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">DISCLOSURE OF PERSONAL
+                                    INFORMATION</p>
+                                <div class="w-100">
+                                    <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                        Your Personal Information may be disclosed in a number of circumstances
+                                        including the following:
+                                    </p>
+                                    <ul class="w-100 ml-md-5 pl-md-0 pl-3">
+                                        <li class="h5 text-black font-weight-bold mb-2">
+                                            Third parties where you consent to the use or disclosure; and
+                                        </li>
+                                        <li class="h5 text-black font-weight-bold mb-2">
+                                            Where required or authorised by law.
+                                        </li>
+
+                                    </ul>
+                                    <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                        SECURITY OF PERSONAL INFORMATION
+                                    </p>
+                                </div>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">Your Personal Information is stored in a manner that reasonably protects it from misuse and loss and from unauthorized access, modification or disclosure.</p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    When your Personal Information is no longer needed for the purpose for which it was obtained, we will take reasonable steps to destroy or permanently de-identify your Personal Information. However, most of the Personal Information is or will be stored in client files which will be kept by us for a minimum of 7 years.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    ACCESS TO YOUR PERSONAL INFORMATION 
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    You may access the Personal Information we hold about you and to update and/or correct it, subject to certain exceptions. If you wish to access your Personal Information, please contact us in writing.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    We will not charge any fee for your access request but may charge an administrative fee for providing a copy of your Personal Information.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    In order to protect your Personal Information, we may require identification from you before releasing the requested information.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    MAINTAINING THE QUALITY OF YOUR PERSONAL INFORMATION
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    It is an important to us that your Personal Information is up to date. We will take reasonable steps to make sure that your Personal Information is accurate, complete and up-to-date. If you find that the information we have is not up to date or is inaccurate, please advise us as soon as practicable so we can update our records and ensure we can continue to provide quality services to you.
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    POLICY UPDATES
+                                </p>
+                               <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                This Policy may change from time to time and is available on our website.
+                               </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    COMPLAINTS & ENQUIRIES
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray text-18">
+                                    If you have any queries or complaints about our Privacy Policy, please contact us at: Administration: admin@flightchkr.com
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        {% include 'footer.html' %}
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

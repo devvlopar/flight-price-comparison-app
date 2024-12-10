@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/style.css">
+     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+    <title> Search Result</title>
+</head>
+
+<body>
+    <header class="main-header-section">
+        <div class="container p-0">
+            <nav class="navbar navbar-expand-lg d-flex align-items-center justify-content-between px-0 py-1">
+                <a class="navbar-brand d-flex align-items-center py-3 pl-3 mr-0" href="#">Flight Tracker (logo)</a>
+                <div>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav">
+                            <li>
+                                <button class="close-btn-nav d-lg-none" type="button" data-toggle="collapse"
+                                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                    aria-expanded="false" aria-label="Toggle navigation">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+                                        <path fill="none" stroke="currentColor" stroke-dasharray="12"
+                                            stroke-dashoffset="12" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="M12 12l7 7M12 12l-7 -7M12 12l-7 7M12 12l7 -7">
+                                            <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s"
+                                                values="12;0" />
+                                        </path>
+                                    </svg>
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Support</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">FAQ</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center py-3 pr-3">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M22 18.005c0 .55-.446.995-.995.995h-8.01a.995.995 0 0 1 0-1.99h8.01c.55 0 .995.445.995.995M22 12c0 .55-.446.995-.995.995H2.995a.995.995 0 1 1 0-1.99h18.01c.55 0 .995.446.995.995m-.995-5.01a.995.995 0 0 0 0-1.99H8.995a.995.995 0 1 0 0 1.99z" />
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="main-content-div">
+        <div class="w-100">
+            <section class="ct-banner-section banner-decrease-h">
+                <div class="container">
+                    <div class="position-relative w-100">
+                        <h1 class="ct-main-title ">
+                            Search Result
+                        </h1>
+                    </div>
+                </div>
+            </section>
+            <section class="register-form-section">
+                <div class="container">
+                    <h3 class="new-search-h ">
+                        new Search
+                    </h3>
+                    <div class="w-100 new-search-content">
+                        <p class="result-text">
+                            London Heathrow (LHR) -> San Francisco (SFO) 02 Feb 2025 - One way - Economy
+                        </p>
+                        <p class="result-text">
+                            London Heathrow (LHR) -> San Francisco (SFO) 02 Feb 2025 - Return 28 Feb 2025 - BUSINESS
+                        </p>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-lg-6">
+                            <div>
+                                <h3 class="mb-3 text-black">
+                                    Analysis:
+                                </h3>
+                                <p class="mb-3 font-weight-midd text-20 text-gray">
+                                    The cheapest flight price is <span class="d-block-inline good-deal-text h5">A GOOD
+                                        DEAL</span>
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray">
+                                    Immediate booking is recommended. Register to view
+                                    flight and price check details.
+                                </p>
+                                <button type="button" class="ct-btn-primary mt-4">  
+                                    Login/Register Free
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+        <footer class="ct-footer-section d-flex align-items-center justify-content-center">
+            <div class="container">
+                <span class="text-18 text-center w-100 d-block">
+                    (c) sitename.com | support@sitename.com
+                </span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

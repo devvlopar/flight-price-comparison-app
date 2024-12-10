@@ -1,0 +1,229 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+
+    <title>Flight Checker: Search Result</title>
+
+</head>
+
+
+<body>
+    {% include 'header.html' %}
+    <div class="main-content-div">
+        <div class="w-100">
+            <section class="ct-banner-section banner-decrease-h">
+                <div class="container">
+                    <div class="position-relative w-100">
+                        <h1 class="ct-main-title ">
+                            Search Result
+                        </h1>
+
+                    </div>
+                </div>
+            </section>
+
+            <section class="register-form-section">
+                <div class="container">
+                    <h3 class="new-search-h ">
+                        <a style="font-size: larger;" href="{% url 'home' %}"> New Search </a> {% if user_details %} <a
+                            style="font-size: larger;" href="{% url 'prev_search' search_id %}"> | Previous Search </a>
+                        {% endif %}
+                    </h3>
+
+
+                    <div class="row mt-4">
+
+
+                        <div id="resultsContainer">
+
+
+                            <div id="loader" style="display:none; text-align:center;">
+                                <img src="https://i.imgur.com/llF5iyg.gif" alt="Loading..."
+                                    style="width: 100px; height: 100px;" />
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-lg-6" id="price-slider">
+
+                            <h3 class="mb-4 text-black" id="anaTitle">
+
+                            </h3>
+
+                            <div>
+                                <p class="mb-3 font-weight-midd text-20 text-gray" id="isAGoodDeal">
+
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray" id="secondP">
+
+                                </p>
+                                <div class="slider-wrapper-range">
+                                    <div id="employees"></div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+
+        {% include 'footer.html' %}
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Show the loader
+            document.getElementById('loader').style.display = 'block';
+
+            // Get the search parameters from the URL
+            const params = new URLSearchParams(window.location.search);
+
+            // Get the Django variables safely from the template and parse them to JavaScript variables
+            // Get search parameters from the Django template
+            const origin = "{{ origin }}";
+            const destination = "{{ destination }}";
+            const departureDate = "{{ departure_date }}";
+            const returnDate = "{{ return_date }}";
+            const cabinClass = "{{ cabin_class }}";
+            let metrics = "";
+            let cheapest_flight = "";
+            let isGoodDeal = "";
+
+
+
+            // Send an AJAX request to fetch flight data
+            fetch(`/get_flight_data/?origin=${origin}&destination=${destination}&departure_date=${departureDate}&return_date=${returnDate}`)
+                .then(response => response.json())
+                .then(data => {
+
+                    function displayFlights(data) {
+                        const resultsContainer = document.getElementById('resultsContainer'); // Assume this exists
+                        resultsContainer.innerHTML = ''; // Clear previous content
+
+                        // Check if flight offers exist
+                        if (!data || !data.length) {
+                            resultsContainer.innerHTML = `
+                    <h3 class="bold">No flights are available on our system: 
+                    <br>Flights from major airlines are currently unavailable.</h3>
+                `;
+                            return;
+                        }
+
+                        // Filter out flight offers with insufficient data
+                        const validFlightOffers = data.filter(flight =>
+                            flight.itineraries && flight.itineraries.length > 0
+                        );
+
+                        if (validFlightOffers.length === 0) {
+                            resultsContainer.innerHTML = `
+                    <h3 class="bold">No detailed flight information available.</h3>
+                `;
+                            return;
+                        }
+
+                        // Create flight cards
+                        const flightsHTML = validFlightOffers.map(flight => {
+                            const flightSegments = [];
+
+                            // Loop through itineraries
+                            flight.itineraries.forEach((itinerary, index) => {
+                                // Loop through segments of each itinerary
+                                itinerary.segments.forEach((segment, segmentIndex) => {
+                                    const departure = segment.departure;
+                                    const arrival = segment.arrival;
+                                    const carrier = segment.operating ? segment.operating.carrierCode : segment.carrierCode;
+                                    const flightNumber = segment.number;
+                                    const aircraftCode = segment.aircraft.code;
+                                    const duration = segment.duration;
+                                    flightSegments.push(`
+                            <div class="d-block mb-3 font-weight-normal text-center">
+                                <span class="d-block-inline text-20 text-light-blue" style="color: light-blue; font-weight: bold">
+                                    ${index === 0 ? 'Outbound Flight' : 'Return Flight'} - Segment ${segmentIndex + 1}
+                                </span>
+                                <div class="departure-card-body w-100 mx-auto">
+                                    <div class="d-flex align-items-center gap-2 departure-box">
+                                        <div class="departure-img">
+                                            <!-- Placeholder for airline logo if available -->
+                                            <img src="https://via.placeholder.com/50" alt="${carrier}" class="w-100 h-100">
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <span class="text-black text-20">
+                                                ${new Date(departure.at).toLocaleString()} - ${departure.iataCode} Terminal ${departure.terminal}
+                                            </span>
+                                            <span class="d-block-inline h2 text-light-blue">&rarr;</span>
+                                            <span class="text-black text-20">
+                                                ${new Date(arrival.at).toLocaleString()} - ${arrival.iataCode} Terminal ${arrival.terminal}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="font-weight-normal">
+                                    Flight Number: ${flightNumber} | Aircraft: ${aircraftCode} | Duration: ${duration}
+                                </div>
+                            </div>
+                        `);
+                                });
+                            });
+
+                            return `
+                    <div class="card mb-3 m-4">
+                        <div class="card-header text-center">
+                            <span class="d-block text-20 text-red fs-2">$ ${flight.price.total}</span>
+                        </div>
+                        <div class="card-body">
+                            ${flightSegments.join('')}
+                        </div>
+                    </div>
+                `;
+                        }).join('');
+
+                        // Add flights to results container
+                        resultsContainer.innerHTML = `<h3>Flight Offers:</h3>${flightsHTML}`;
+                    }
+
+
+                })
+
+
+        });
+
+
+
+
+    </script>
+
+
+
+</body>
+
+</html>

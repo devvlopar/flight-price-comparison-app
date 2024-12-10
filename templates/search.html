@@ -1,0 +1,322 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+   
+
+
+    <script>
+        $(document).ready(function () {
+            
+            $("#inputOrigin").autocomplete({
+                    source: "{% url 'get_airport' %}",
+                    minLength: 1,
+                    delay: 200,
+                });
+                
+            $("#inputDestination").autocomplete({
+
+                source: "{% url 'get_airport' %}",
+                minLength: 1,
+                delay: 200,
+                response: function (event, ui) {
+                    let originVal = $("#inputOrigin").val();
+
+                    // Mark the option to be disabled by adding a custom flag
+                    ui.content.forEach(function (item) {
+                        if (item.label === originVal) {
+                            item.disabled = true; // Custom flag
+                        }
+                    });
+                },
+                create: function () {
+                    // Customize item rendering
+                    $(this).data("ui-autocomplete")._renderItem = function (ul, item) {
+                        const li = $("<li>");
+
+                        // Add a CSS class for disabled items
+                        if (item.disabled) {
+                            li.addClass("ui-state-disabled");
+                        }
+
+                        return li
+                            .append($("<div>").text(item.label)) // Customize how the item appears
+                            .appendTo(ul);
+                    };
+                },
+                select: function (event, ui) {
+                    if (ui.item.disabled) {
+                        event.preventDefault(); // Prevent selection of disabled items
+                    }
+                }
+            });
+            
+        });
+    </script>
+   
+
+
+    <title>Flight Checker: The Home of Cheap Flights</title>
+
+    <style>
+        .custom-date {
+            cursor: pointer;
+        }
+        .input-group .form-control {
+    border-right: 0;
+}
+
+.input-group .input-group-append .input-group-text {
+    background: #fff;
+    border-left: 0;
+    cursor: pointer;
+}
+
+.input-group .input-group-append .input-group-text i {
+    color: #007bff;
+}
+ input[type="date"]::-webkit-calendar-picker-indicator { display: none; }
+
+.date-icons input{
+  padding-right: 50px;
+}
+.date-icons .date-svg-icons{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background-color: #fff;
+  display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    pointer-events: none;
+}
+
+
+    </style>
+</head>
+
+<body>
+    {% include 'header.html' %}
+    <section class="ct-banner-section">
+        <div class="container">
+            <div class="banner-inner-data">
+                <div class="d-flex align-items-center justify-content-end user-log-out-boxs">
+
+                </div>
+            </div>
+            <div class="position-relative w-100">
+                <h1 class="ct-main-title ">
+                    know when to book
+                </h1>
+                <span class="text-banner text-18">
+                    Save on flights by using our system to learn if now is the right time to book, or if you should
+                    wait.
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <section class="search-flights-section">
+        <div class="container">
+            <div class="ct-search-form">
+            <form class="w-100" action="{% url 'search_flight' %}" method="post">
+                {% csrf_token %}
+                <div class="d-flex align-items-center justify-content-between gap-2 mb-4 flex-wrap">
+                    <div class="d-flex align-items-center justify-content-between gap-2">
+                        <div class="d-flex align-items-center gap-1 search-radio">
+                            <input type="radio" id="round-trip" name="select-radio" checked>
+                            <label for="round-trip" class="mb-0">Round Trip </label>
+                        </div>
+                        <div class="d-flex align-items-center gap-1 search-radio">
+                            <input type="radio" name="select-radio" id="one-way">
+                            <label for="one-way" class="mb-0">One Way </label>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-1 search-radio">
+                            <input type="checkbox" id="DirectFlightsOnly" name="directFlights">
+                            <label for="DirectFlightsOnly" class="mb-0">Direct Flights Only</label>
+                        </div>
+                    </div>
+                </div>
+                    <div class="search-grid">
+                        <div class="form-group mb-0">
+                            <label>from</label>
+                            <div class="w-100 position-relative ">
+                                <input type="text" name="Origin" id="inputOrigin" class="form-control"
+                                    placeholder="From" required autofocus>
+                                <input type="hidden" id="directFlightsEnable" name="direct_flight">
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label>To</label>
+                            <div class="w-100 position-relative ">
+                                <input type="text" name="Destination" id="inputDestination" class="form-control"
+                                    placeholder="To" required autofocus>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label>Cabin Class</label>
+                            <div class="w-100 position-relative select-appearance">
+                                <select class="form-control " name="Cabinclass">
+                                    <option value="ECONOMY">Economy</option>
+                                    <option value="PREMIUM_ECONOMY">Premium Economy</option>
+                                    <option value="BUSINESS">Business</option>
+                                    <option value="FIRST">First Class</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label>Departure</label>
+                            <div class="date input-group position-relative date-icons">
+                                <input type="date" name="Departuredate" id="departure" class="form-control custom-date"
+                                    placeholder="Departure Date" required>
+                                    <div class=date-svg-icons>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16"><path fill="#000000" d="M14.5 16h-13C.67 16 0 15.33 0 14.5v-12C0 1.67.67 1 1.5 1h13c.83 0 1.5.67 1.5 1.5v12c0 .83-.67 1.5-1.5 1.5M1.5 2c-.28 0-.5.22-.5.5v12c0 .28.22.5.5.5h13c.28 0 .5-.22.5-.5v-12c0-.28-.22-.5-.5-.5z"/><path fill="#000000" d="M4.5 4c-.28 0-.5-.22-.5-.5v-3c0-.28.22-.5.5-.5s.5.22.5.5v3c0 .28-.22.5-.5.5m7 0c-.28 0-.5-.22-.5-.5v-3c0-.28.22-.5.5-.5s.5.22.5.5v3c0 .28-.22.5-.5.5m4 2H.5C.22 6 0 5.78 0 5.5S.22 5 .5 5h15c.28 0 .5.22.5.5s-.22.5-.5.5"/></svg>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label>Return</label>
+                            <div class="date position-relative date-icons">
+                                <input type="date" name="Returndate" id="return" class="form-control custom-date"
+                                    placeholder="Return Date" required>
+                                    <div class=date-svg-icons>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16"><path fill="#000000" d="M14.5 16h-13C.67 16 0 15.33 0 14.5v-12C0 1.67.67 1 1.5 1h13c.83 0 1.5.67 1.5 1.5v12c0 .83-.67 1.5-1.5 1.5M1.5 2c-.28 0-.5.22-.5.5v12c0 .28.22.5.5.5h13c.28 0 .5-.22.5-.5v-12c0-.28-.22-.5-.5-.5z"/><path fill="#000000" d="M4.5 4c-.28 0-.5-.22-.5-.5v-3c0-.28.22-.5.5-.5s.5.22.5.5v3c0 .28-.22.5-.5.5m7 0c-.28 0-.5-.22-.5-.5v-3c0-.28.22-.5.5-.5s.5.22.5.5v3c0 .28-.22.5-.5.5m4 2H.5C.22 6 0 5.78 0 5.5S.22 5 .5 5h15c.28 0 .5.22.5.5s-.22.5-.5.5"/></svg>
+                                    </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button id="search-btn" type="submit" class="btn-searchFlight w-100">Search Flight</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <span class="mt-3 d-block text-18 text-gray">
+                Flights from American Airlines, Delta and British Airways are currently unavailable.
+            </span>
+        </div>
+    </section>
+
+    <section class="key-section w-100 position-relative">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-lg-0 mb-3">
+                    <div class="key-boxes">
+                        <img src="{% static 'images/icon1.png' %}" alt="img">
+                        <h2 class="my-3">Stay one move ahead</h2>
+                        <span class="d-block text-center text-gray">
+
+                            FlightChkr.com gives you the strategic advantage
+                            by using historical flight data and special algorithm
+                            to let you know what the price should be for your flight.
+                            You can then delay booking, if necessary, until the price
+                            comes within an acceptable range of the target. The savings
+                            can be significant.
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-lg-0 mb-3">
+                    <div class="key-boxes">
+                        <img src="{% static 'images/icon2.png' %}" alt="img">
+                        <h2 class="my-3">Compare departure airports</h2>
+                        <span class="d-block text-center text-gray">
+                            It is a common belief that the well-known airlines that depart from
+                            your home airport are the best or only options to travel with. This
+                            is rarely the case. There might be airlines that depart from another city that will
+                            get you to your destination for a much lower total price.
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-lg-0 mb-3">
+                    <div class="key-boxes">
+                        <img src="{% static 'images/icon3.png' %}" alt="img">
+                        <h2 class="my-3">Book when the price is right</h2>
+                        <span class="d-block text-center text-gray">
+                            We don’t handle flight bookings here, we just let you know when to book. Use any site you
+                            want, but we do recommend Expedia as the best and most trustworthy service available. The
+                            prices we show you are from the same system used by most airline websites and online agents.
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-lg-0 mb-3">
+                    <div class="key-boxes">
+                        <img src="{% static 'images/icon4.png' %}" alt="img">
+                        <h2 class="my-3">Price alerts (coming soon)</h2>
+                        <span class="d-block text-center text-gray">
+                            On FlightChkr.com you will soon be able to have multiple flights automatically monitored for
+                            you and receive alerts via email. Let the system do the work for you. Make sure you register
+                            and select “Receive email updates” to be kept informed.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <script>
+        // Check for changes to radio buttons and handle the Return field
+        $("input[name='select-radio']").on("change", function () {
+            if ($("#one-way").prop("checked")) {
+                // Clear and disable the Return date field when One Way is selected
+                $("#return").val('').removeAttr('required').closest(".form-group").hide();
+            } else {
+                // Enable the Return date field when Round Trip is selected
+                $("#return").closest(".form-group").show();
+            }
+        });
+
+
+
+
+        // Get today's date in the format yyyy-mm-dd
+        const today = new Date().toISOString().split('T')[0];
+
+        // Set the min attribute for date inputs
+        document.getElementById("departure").setAttribute("min", today);
+        document.getElementById("return").setAttribute("min", today);
+
+        // Optionally ensure the return date is after or equal to the departure date
+        document.getElementById("departure").addEventListener("change", function () {
+            const departureDate = this.value;
+            document.getElementById("return").setAttribute("min", departureDate);
+        });
+
+        const dateInputs = document.querySelectorAll('.custom-date');
+
+        // Add the focus event listener to all date inputs
+        dateInputs.forEach(dateInput => {
+            dateInput.addEventListener('focus', () => {
+                dateInput.showPicker?.(); // Open the picker programmatically if supported
+            });
+        });
+
+
+    </script>
+
+
+
+
+</body>
+
+</html>

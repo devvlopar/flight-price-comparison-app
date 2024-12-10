@@ -1,0 +1,580 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+    <title>Flight Checker: Search Result</title>
+
+</head>
+
+
+<body>
+    {% include 'header.html' %}
+    <div class="main-content-div">
+        <div class="w-100">
+            <section class="ct-banner-section banner-decrease-h">
+                <div class="container">
+                    <div class="position-relative w-100">
+                        <h1 class="ct-main-title ">
+                            Search Result
+                        </h1>
+
+                    </div>
+                </div>
+            </section>
+
+            <section class="register-form-section">
+                <div class="container">
+                    <h3 class="new-search-h ">
+                        <a style="font-size: larger;" href="{% url 'home' %}"> New Search </a> {% if user_details and latest_search %} 
+                        <a
+                            style="font-size: larger;" href="{% url 'prev_search' search_id %}"> | Previous Search </a>
+                        {% endif %}
+                    </h3>
+                    {% if latest_search != "login" and latest_search %}
+                    <div class="w-100 new-search-content container-fluid"
+                        style="background-color: rgb(13, 145, 238); border-radius: 15px; padding: 20px;">
+                        
+                        {% for i in latest_search %}
+                        <p class="result-text" style="color: black; font-weight: bold; margin: 10px 0;">
+                            {{i.origin_location}} -> {{i.destination_location}} {{i.from_date}} - {% if i.is_one_way%}One way{% else %} Return {{i.return_date}} {% endif %} - {{i.travel_class}}
+                        </p>
+                        {% endfor %}
+                        
+                    </div>
+                    {% endif %}
+
+                    <div class="row mt-4">
+
+
+                        <div class="col-lg-6" id="flight-results">
+
+                            {% include 'skeleton_loader.html' %}
+                           
+
+                        </div>
+
+                        <div class="col-lg-6" id="price-slider">
+                            {% include 'skeleton_loader2.html' %}
+
+                            <h3 class="mb-4 text-black" id="anaTitle">
+
+                            </h3>
+
+                            <div>
+                                <p class="mb-3 font-weight-midd text-20 text-gray" id="isAGoodDeal">
+
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray" id="secondP">
+
+                                </p>
+                                <div class="slider-wrapper-range">
+                                    <div id="employees"></div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+
+        {% include 'footer.html' %}
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+
+    
+    
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            
+
+            // Get the search parameters from the URL
+            const params = new URLSearchParams(window.location.search);
+
+            // Get the Django variables safely from the template and parse them to JavaScript variables
+            // Get search parameters from the Django template
+            const origin = "{{ origin }}";
+            const destination = "{{ destination }}";
+            const departureDate = "{{ departure_date }}";
+            const returnDate = "{{ return_date }}";
+            const travelClass = "{{ cabin_class }}";
+            {% if nonStop == True or nonStop == 'true' %}
+
+            const nonStop = "true";
+            
+            {% else %}
+
+            const nonStop = "false";
+
+            {% endif %}
+            
+            let metrics = "";
+            let cheapest_flight = "";
+            let isGoodDeal = "";
+
+
+
+
+
+
+            // Send an AJAX request to fetch flight data
+            fetch(`/get_flight_data/?origin=${origin}&destination=${destination}&departure_date=${departureDate}&return_date=${returnDate}&nonStop=${nonStop}&travelClass=${travelClass}`)
+                .then(response => response.json())
+                .then(data => {
+
+                  
+                    // Create a container for flight results
+                    const resultsContainer = document.getElementById("flight-results");
+                    resultsContainer.innerHTML = '';
+                    console.log(data.flight_offers, data);
+                    cheapestFlight = data.cheapest_flight
+
+                    if (data.flight_offers.length != 0  ) {
+                        const h3Wo = document.createElement('h3');
+                       if(returnDate != ""){
+                        h3Wo.innerHTML = `Flights: ${origin} ✈ ${destination}  <br> <h4>Departure: ${departureDate} Return: ${returnDate} </h4>`;
+                        } else {
+                        h3Wo.textContent = `Flights: ${origin} ✈ ${destination}  ${departureDate}`;
+                        }
+                        resultsContainer.appendChild(h3Wo);
+
+                        isGoodDeal = data.is_good_deal;
+                        metrics = data.metrics;
+                        
+
+                        
+                        data.flight_offers.forEach(flight => {
+                            if (!('0firstFlightAirlineLogo' in flight)) { return; }
+                            
+                            const cardDiv = document.createElement('div');
+                            cardDiv.classList.add('card', 'mb-3');
+
+                            const cardHeader = document.createElement('div');
+                            cardHeader.classList.add('card-header', 'text-center');
+                            const priceSpan = document.createElement('span');
+                            priceSpan.classList.add('d-block', 'text-20', 'text-red', 'fs-2');
+                            priceSpan.textContent = `${data.currency_symbol} ${flight.price} `;
+                            cardHeader.appendChild(priceSpan);
+
+                            cardDiv.appendChild(cardHeader);
+
+
+
+                            const cardBody = document.createElement('div');
+                            cardBody.classList.add('card-body');
+
+                            const departureInfo = document.createElement('span');
+                            departureInfo.classList.add('d-block', 'mb-3', 'font-weight-normal', 'text-center');
+                            departureInfo.innerHTML = `<span class="d-block-inline text-20 text-light-blue" style="color: light-blue; font-weight: bold">Departure</span>
+                                               Flight Time ${flight['0firstFlightArrivalDuration'].slice(2)}`;
+                            cardBody.appendChild(departureInfo);
+
+                            const departureCardBody = document.createElement('div');
+                            departureCardBody.classList.add('departure-card-body', 'w-100', 'mx-auto');
+                            const departureBox = document.createElement('div');
+                            departureBox.classList.add('d-flex', 'align-items-center', 'gap-2', 'departure-box');
+
+                            const departureImg = document.createElement('div');
+                            departureImg.classList.add('departure-img');
+                            const img = document.createElement('img');
+                            img.src = flight['0firstFlightAirlineLogo'];
+                            img.alt = flight['0firstFlightAirline'];
+                            img.classList.add('w-100', 'h-100');
+                            departureImg.appendChild(img);
+
+                            const departureDetails = document.createElement('div');
+                            departureDetails.classList.add('d-flex', 'align-items-center', 'gap-1');
+                            departureDetails.innerHTML = `
+                        <span class="text-black text-20">${flight['0firstFlightDepartureDate']} ${flight['0firstFlightDepartureAirport']}</span>
+                        <span class="d-block-inline h2 text-light-blue">&rarr;</span>
+                        <span class="text-black text-20">${flight['0firstFlightArrivalDate']} ${flight['0firstFlightArrivalAirport']}</span>
+                    `;
+                            departureBox.appendChild(departureImg);
+                            departureBox.appendChild(departureDetails);
+                            departureCardBody.appendChild(departureBox);
+
+                            cardBody.appendChild(departureCardBody);
+
+                            // if the FIRST flight is a connecting flight
+                            if (flight['0secondFlightArrivalDuration']) {
+
+                                const connectionInfo = document.createElement('span');
+                                connectionInfo.classList.add('d-block', 'mb-3', 'font-weight-normal', 'text-center');
+                                connectionInfo.innerHTML = `<span class="d-block-inline text-20 text-light-blue" style="color: light-blue; font-weight: bold">Connection</span>
+                                               Flight Time ${flight['0secondFlightArrivalDuration'].slice(2)}`;
+                                cardBody.appendChild(connectionInfo);
+
+                                const connectionCardBody = document.createElement('div');
+                                connectionCardBody.classList.add('departure-card-body', 'w-100', 'mx-auto');
+                                const connectionBox = document.createElement('div');
+                                connectionBox.classList.add('d-flex', 'align-items-center', 'gap-2', 'departure-box');
+
+                                const conectionImg = document.createElement('div');
+                                conectionImg.classList.add('departure-img');
+                                const cimg = document.createElement('img');
+                                cimg.src = flight['0secondFlightAirlineLogo'];
+                                cimg.alt = flight['0secondFlightAirline'];
+                                cimg.classList.add('w-100', 'h-100');
+                                conectionImg.appendChild(cimg);
+
+                                const connectionDetails = document.createElement('div');
+                                connectionDetails.classList.add('d-flex', 'align-items-center', 'gap-1');
+                                connectionDetails.innerHTML = `
+                        <span class="text-black text-20">${flight['0secondFlightDepartureDate']} ${flight['0secondFlightDepartureAirport']}</span>
+                        <span class="d-block-inline h2 text-light-blue">&rarr;</span>
+                        <span class="text-black text-20">${flight['0secondFlightArrivalDate']} ${flight['0secondFlightArrivalAirport']}</span>
+                    `;
+                                connectionBox.appendChild(conectionImg);
+                                connectionBox.appendChild(connectionDetails);
+                                connectionCardBody.appendChild(connectionBox);
+
+                                cardBody.appendChild(connectionCardBody);
+                            };
+
+
+                            // If there is 3rd connecting flight 
+                        if (flight['0thirdFlightArrivalDuration']) {
+
+                            const connectionInfo = document.createElement('span');
+                            connectionInfo.classList.add('d-block', 'mb-3', 'font-weight-normal', 'text-center');
+                            connectionInfo.innerHTML = `<span class="d-block-inline text-20 text-light-blue" style="color: light-blue; font-weight: bold">Connection</span>
+                                        Flight Time ${flight['0thirdFlightArrivalDuration'].slice(2)}`;
+                            cardBody.appendChild(connectionInfo);
+
+                            const connectionCardBody = document.createElement('div');
+                            connectionCardBody.classList.add('departure-card-body', 'w-100', 'mx-auto');
+                            const connectionBox = document.createElement('div');
+                            connectionBox.classList.add('d-flex', 'align-items-center', 'gap-2', 'departure-box');
+
+                            const conectionImg = document.createElement('div');
+                            conectionImg.classList.add('departure-img');
+                            const cimg = document.createElement('img');
+                            cimg.src = flight['0thirdFlightAirlineLogo'];
+                            cimg.alt = flight['0thirdFlightAirline'];
+                            cimg.classList.add('w-100', 'h-100');
+                            conectionImg.appendChild(cimg);
+
+                            const connectionDetails = document.createElement('div');
+                            connectionDetails.classList.add('d-flex', 'align-items-center', 'gap-1');
+                            connectionDetails.innerHTML = `
+                            <span class="text-black text-20">${flight['0thirdFlightDepartureDate']} ${flight['0thirdFlightDepartureAirport']}</span>
+                            <span class="d-block-inline h2 text-light-blue">&rarr;</span>
+                            <span class="text-black text-20">${flight['0thirdFlightArrivalDate']} ${flight['0thirdFlightArrivalAirport']}</span>
+                            `;
+                            connectionBox.appendChild(conectionImg);
+                            connectionBox.appendChild(connectionDetails);
+                            connectionCardBody.appendChild(connectionBox);
+
+                            cardBody.appendChild(connectionCardBody);
+                            };
+
+
+
+
+
+                            // if the trip is a round trip
+                            const card2Div = document.createElement('div');
+                            if (flight['1firstFlightDepartureAirport']) {
+                                card2Div.classList.add('card', 'mb-3', 'm-4');
+
+
+
+                                // const card2Body = document.createElement('div');
+                                // card2Body.classList.add('card-body');
+
+                                const departure2Info = document.createElement('span');
+                                departure2Info.classList.add('d-block', 'mb-3', 'font-weight-normal', 'text-center');
+                                departure2Info.innerHTML = `<br><br>
+                    <span class="d-block-inline text-20 text-light-blue">Return Flight</span>
+                    <span class="d-block-inline text-20 text-light-blue" style="color: light-blue; font-weight: bold">Departure</span>
+                                               Flight Time ${flight['1firstFlightArrivalDuration'].slice(2)}`;
+                                // HERE
+                                cardBody.appendChild(departure2Info);
+
+                                const departure2CardBody = document.createElement('div');
+                                departure2CardBody.classList.add('departure-card-body', 'w-100', 'mx-auto');
+                                const departure2Box = document.createElement('div');
+                                departure2Box.classList.add('d-flex', 'align-items-center', 'gap-2', 'departure-box');
+
+                                const departure2Img = document.createElement('div');
+                                departure2Img.classList.add('departure-img');
+                                const imgr = document.createElement('img');
+                                imgr.src = flight['1firstFlightAirlineLogo'];
+                                imgr.alt = flight['1firstFlightAirline'];
+                                imgr.classList.add('w-100', 'h-100');
+                                departure2Img.appendChild(imgr);
+
+                                const departure2Details = document.createElement('div');
+                                departure2Details.classList.add('d-flex', 'align-items-center', 'gap-1');
+                                departure2Details.innerHTML = `
+                        <span class="text-black text-20">${flight['1firstFlightDepartureDate']} ${flight['1firstFlightDepartureAirport']}</span>
+                        <span class="d-block-inline h2 text-light-blue">&rarr;</span>
+                        <span class="text-black text-20">${flight['1firstFlightArrivalDate']} ${flight['1firstFlightArrivalAirport']}</span>
+                    `;
+                                departure2Box.appendChild(departure2Img);
+                                departure2Box.appendChild(departure2Details);
+                                departure2CardBody.appendChild(departure2Box);
+
+                                cardBody.appendChild(departure2CardBody);
+
+                                // if the SECOND flight is a connecting flight
+                                if (flight['1secondFlightDepartureAirport']) {
+
+                                    const connection3Info = document.createElement('span');
+                                    connection3Info.classList.add('d-block', 'mb-3', 'font-weight-normal', 'text-center');
+                                    connection3Info.innerHTML = `<span class="d-block-inline text-20 text-light-blue" style="color: light-blue; font-weight: bold">Connection</span>
+                                               Flight Time ${flight['1secondFlightArrivalDuration'].slice(2)}`;
+                                    cardBody.appendChild(connection3Info);
+
+                                    const connection3CardBody = document.createElement('div');
+                                    connection3CardBody.classList.add('departure-card-body', 'w-100', 'mx-auto');
+                                    const connection3Box = document.createElement('div');
+                                    connection3Box.classList.add('d-flex', 'align-items-center', 'gap-2', 'departure-box');
+
+                                    const conection3Img = document.createElement('div');
+                                    conection3Img.classList.add('departure-img');
+                                    const cimg3 = document.createElement('img');
+                                    cimg3.src = flight['1secondFlightAirlineLogo'];
+                                    cimg3.alt = flight['1secondFlightAirline'];
+                                    cimg3.classList.add('w-100', 'h-100');
+                                    conection3Img.appendChild(cimg3);
+
+                                    const connection3Details = document.createElement('div');
+                                    connection3Details.classList.add('d-flex', 'align-items-center', 'gap-1');
+                                    connection3Details.innerHTML = `
+                        <span class="text-black text-20">${flight['1secondFlightDepartureDate']} ${flight['1secondFlightDepartureAirport']}</span>
+                        <span class="d-block-inline h2 text-light-blue">&rarr;</span>
+                        <span class="text-black text-20">${flight['1secondFlightArrivalDate']} ${flight['1secondFlightArrivalAirport']}</span>
+                    `;
+                                    connection3Box.appendChild(conection3Img);
+                                    connection3Box.appendChild(connection3Details);
+                                    connection3CardBody.appendChild(connection3Box);
+
+                                    cardBody.appendChild(connection3CardBody);
+
+                                };
+
+                                card2Div.appendChild(cardBody);
+
+                                //if in return there is 3rd connecting flight
+                                if (flight['1thirdFlightDepartureAirport']) {
+
+                                    const connection3Info = document.createElement('span');
+                                    connection3Info.classList.add('d-block', 'mb-3', 'font-weight-normal', 'text-center');
+                                    connection3Info.innerHTML = `<span class="d-block-inline text-20 text-light-blue" style="color: light-blue; font-weight: bold">Connection</span>
+                                            Flight Time ${flight['1thirdFlightArrivalDuration'].slice(2)}`;
+                                    cardBody.appendChild(connection3Info);
+
+                                    const connection3CardBody = document.createElement('div');
+                                    connection3CardBody.classList.add('departure-card-body', 'w-100', 'mx-auto');
+                                    const connection3Box = document.createElement('div');
+                                    connection3Box.classList.add('d-flex', 'align-items-center', 'gap-2', 'departure-box');
+
+                                    const conection3Img = document.createElement('div');
+                                    conection3Img.classList.add('departure-img');
+                                    const cimg3 = document.createElement('img');
+                                    cimg3.src = flight['1thirdFlightAirlineLogo'];
+                                    cimg3.alt = flight['1thirdFlightAirline'];
+                                    cimg3.classList.add('w-100', 'h-100');
+                                    conection3Img.appendChild(cimg3);
+
+                                    const connection3Details = document.createElement('div');
+                                    connection3Details.classList.add('d-flex', 'align-items-center', 'gap-1');
+                                    connection3Details.innerHTML = `
+                                    <span class="text-black text-20">${flight['1thirdFlightDepartureDate']} ${flight['1thirdFlightDepartureAirport']}</span>
+                                    <span class="d-block-inline h2 text-light-blue">&rarr;</span>
+                                    <span class="text-black text-20">${flight['1thirdFlightArrivalDate']} ${flight['1thirdFlightArrivalAirport']}</span>
+                                    `;
+                                    connection3Box.appendChild(conection3Img);
+                                    connection3Box.appendChild(connection3Details);
+                                    connection3CardBody.appendChild(connection3Box);
+
+                                    cardBody.appendChild(connection3CardBody);
+
+                                    };
+
+                                    card2Div.appendChild(cardBody);
+
+
+
+
+                            };
+
+
+                            // in return if 3rd flight is there
+                            
+
+
+
+
+
+                            // common code for adding elements for both flights
+                            cardDiv.appendChild(cardBody);
+                            // Append the complete card to the results container
+
+                            resultsContainer.appendChild(cardDiv);
+                            resultsContainer.appendChild(card2Div);
+
+
+
+                        });
+
+
+                    } else {
+                        console.log('no flights-------------------');
+                        resultsContainer.innerHTML = '<h3>Flights:<h3><br>No flights are available on our system: <br>Flights from American Airlines, Delta and British Airways are currently unavailable.';
+                    }
+                    var currencySymbol = data.currency_symbol;
+                    var cheapestFlight = data.cheapest_flight;
+                    return {currencySymbol, cheapestFlight};
+
+
+                }).then(({currencySymbol, cheapestFlight}) => {
+                    const sliderDiv = document.getElementById("price-slider");
+                    sliderDiv.innerHTML = `<h3 class="mb-4 text-black" id="anaTitle">
+
+                            </h3>
+
+                            <div>
+                                <p class="mb-3 font-weight-midd text-20 text-gray" id="isAGoodDeal">
+
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray" id="secondP">
+
+                                </p>
+                                <div class="slider-wrapper-range">
+                                    <div id="employees"></div>
+                                </div>`;
+                    console.log(currencySymbol);
+                    
+                    if (metrics && metrics.min && metrics.max) {
+                        
+                        const employees = document.querySelector("#employees");
+                        
+                        // Ensure metrics.min and metrics.max are numbers
+                        const min = parseFloat(metrics.min);
+                        const max = parseFloat(metrics.max);
+                        const first = parseFloat(metrics.first);
+                        const third = parseFloat(metrics.third);
+                       
+                        console.log(cheapestFlight);
+                        const cheapestFlightPosition = ((cheapestFlight - min) / (max - min)) * 100;
+                        
+
+                        // Calculate 20% of the range for intermediate labels
+                        let aTen = (max - min) * 0.2;
+
+                        // Define labels dynamically
+                        const labels = {
+                            [cheapestFlight] : `${currencySymbol} ${cheapestFlight} `
+                            
+                        };
+
+                        // Create the slider
+                        noUiSlider.create(employees, {
+                            start: [first, third], // Two handles start at 20% and 80% of the range
+                            connect: [true, true, false],   // Define connections
+                            
+                            tooltips: [
+                                {
+                                    to: function (value) {
+                                        return `${currencySymbol} ${parseFloat(value).toFixed(2)}`;
+                                    }
+                                },
+                                {
+                                    to: function (value) {
+                                        return `${currencySymbol} ${parseFloat(value).toFixed(2)}`;
+                                    }
+                                }
+                            ],
+                            range: {
+                                'min': min,
+                                'max': max
+                            },
+                            pips: {
+                                mode: 'positions', // Use 'positions' for dynamic pip placement
+                                values: [cheapestFlightPosition], // Percentage positions along the slider
+                                density: 6, // Number of steps per range division
+                                format: {
+                                    to: function (value) {
+                                        if (parseFloat(value).toFixed(2) === parseFloat(cheapestFlight).toFixed(2)) {
+                                            return `${currencySymbol} ${cheapestFlight}`;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        
+
+                        const firstP = document.getElementById("isAGoodDeal");
+                        firstP.innerHTML = `The cheapest Available fight is <span class="d-block-inline text-light-blue h5">${isGoodDeal}
+                                    </span>`;
+
+                        const secondP = document.getElementById("secondP");
+                        secondP.innerHTML = `The Least expensive flights usually cost between <br> ${currencySymbol} ${first} - ${currencySymbol} ${third}`;
+                        
+                        // Assign custom classes to the segments
+                        const connects = employees.querySelectorAll('.noUi-connect');
+                        connects[0].classList.add('left-segment'); // Left segment
+                        connects[1].classList.add('middle-segment'); // Middle segment
+
+                        const anaTitle = document.getElementById("anaTitle");
+    
+                        anaTitle.innerHTML = `Analysis: `;
+                    } else {
+                        const sliderDiv = document.getElementById("price-slider");
+                        sliderDiv.innerHTML = "<h3>Price metrics are not available for this trip.<h3>";
+                        
+                    }
+                    
+
+
+
+
+
+
+                    
+
+                });
+
+        });
+
+
+
+
+    </script>
+
+
+
+</body>
+
+</html>
