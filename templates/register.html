@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
 
     <title>Flight Checker: Register</title>
 
@@ -72,6 +74,26 @@
                 max-width: 90%;
 
             }
+
+            .required {
+                color: red;
+                font-weight: bold;
+            }
+
+            .eye-icon {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+            }
+
+            input[type="password"] {
+                width: 100%;
+                padding: 10px;
+                padding-right: 40px;
+                box-sizing: border-box;
+            }
     </style>
 
 </head>
@@ -89,6 +111,27 @@
             </div>
         </div>
     </section>
+    <br>
+    <section class="container align-center  register-f">
+        <div class="container row ">
+            <div class="col-lg-1" style="margin-right: 0%;">
+                <img src="{% static 'images/i-icon.png' %}" alt="info">
+            </div>
+            <div class="col-lg-11 text-align-center">
+                <h5>The flight checker system is currently free to use. No credit card or other form of payment is
+                    required. Subscription options will become available in the near future.</h5>
+            </div>
+        </div>
+
+    </section>
+    <br>
+
+    <div class="container">
+        <a href="{% url 'login' %}">
+            <h3 class="new-search-h ">Login Page</h3>
+        </a>
+    </div>
+
 
     <section class="register-form-section">
         <div class="container">
@@ -99,57 +142,64 @@
 
 
                 <div class="re-card-body position-relative pt-85">
-                    {% if message %}
-                    <div class="show-alert-data">
+
+                    <div id="messageBox" class="show-alert-data">
                         {% if message == "Account Created Successfully!" %}
                         <div class="alert alert-success text-center" role="alert">
                             <label class="mb-0"> {{message}}</label>
                         </div>
-                        {% else %}
+
                         <div class="alert alert-danger text-center" role="alert">
                             <label class="mb-0"> {{message}}</label>
                         </div>
                         {% endif %}
                     </div>
-                    {% endif %}
 
 
-                    <form class="w-100" action="{% url 'register' %}" method="post">
+                    <form class="w-100" id="myForm">
                         {% csrf_token %}
 
                         <div class="form-group d-flex align-items-center ">
                             <label class="mb-0">First Name</label>
-                            <input type="text" name="first_name" placeholder="Enter First Name" class="form-control"
-                                required>
+                            <input type="text" id="first_name" name="first_name" placeholder="Enter First Name"
+                                class="form-control" required>
+                            <span class="required">*</span>
                         </div>
                         <div class="form-group d-flex align-items-center ">
                             <label class="mb-0">Last Name</label>
-                            <input type="text" name="last_name" placeholder="Enter Last Name" class="form-control"
-                                required>
+                            <input type="text" id="last_name" name="last_name" placeholder="Enter Last Name"
+                                class="form-control" required>
+                            <span class="required">*</span>
                         </div>
                         <div class="form-group d-flex align-items-center ">
                             <label class="mb-0">Email Address</label>
 
 
-                            <input type="email" name="email" placeholder="Enter Email Address"
+                            <input type="email" id="email" name="email" placeholder="Enter Email Address"
                                 class="form-control w-100" required>
+                            <span class="required">*</span>
 
 
                         </div>
                         <div class="form-group d-flex align-items-center ">
                             <label class="mb-0">Confirm Email Address</label>
-                            <input type="email" name="confirm_email" placeholder="Enter Email Address again"
-                                class="form-control" required>
+                            <input type="email" id="confirm_email" name="confirm_email"
+                                placeholder="Enter Email Address again" class="form-control" required>
+                            <span class="required">*</span>
                         </div>
                         <div class="form-group d-flex align-items-center ">
                             <label class="mb-0">Password</label>
-                            <input type="password" name="password" placeholder="Enter Password" class="form-control"
-                                required>
+                            <input type="password" name="password" id="password1" placeholder="Enter Password"
+                                class="form-control" required>
+                            <span id="togglePassword1" class="eye-icon">&#128065;</span>
+                            <span class="required">*</span>
                         </div>
                         <div class="form-group d-flex align-items-center ">
                             <label class="mb-0">Confirm Password</label>
-                            <input type="password" name="confirm_password" placeholder="Enter Password again"
-                                class="form-control" required>
+                            <input type="password" name="confirm_password" id="password2"
+                                placeholder="Enter Password again" class="form-control" required>
+                            <span id="togglePassword2" class="eye-icon">&#128065;</span>
+                            <span class="required">*</span>
                         </div>
                         <div class="g-recaptcha form-group d-flex align-items-left"
                             data-sitekey="6LcfU4sqAAAAAPO5Zu94gVWjiuVU87oyOaexTAoa"></div>
@@ -171,7 +221,7 @@
 
                         </div>
                         <div class="w-100 mt-5 d-flex justify-content-end">
-                            <button type="submit" class="ct-btn-register">Register</button>
+                            <button type="submit" id="submitButton" class="ct-btn-register">Register</button>
                         </div>
                     </form>
                 </div>
@@ -180,6 +230,79 @@
     </section>
 
     <div class="overlay" id="overlay"></div>
+
+    <script>
+        $(document).ready(function () {
+            $('#myForm').on('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                const email = $('#email').val(); // Get the email value
+                const first_name = $('#first_name').val();
+                const last_name = $('#last_name').val();
+                const confirm_email = $('#confirm_email').val();
+                const password1 = $('#password1').val();
+                const password2 = $('#password2').val();
+                const csrfToken = $('[name=csrfmiddlewaretoken]').val(); // Get CSRF token
+                const recaptchaResponse = grecaptcha.getResponse();
+
+                // Check if reCAPTCHA is completed
+                if (recaptchaResponse === "") {
+                    alert("Please complete the reCAPTCHA");
+                    return;
+                }
+
+                $.ajax({
+                    url: "{% url 'register' %}", // Replace with your Django view URL
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken // Set CSRF token header
+                    },
+                    data: {
+                        email: email,
+                        first_name: first_name,
+                        last_name: last_name,
+                        confirm_email: confirm_email,
+                        password1: password1,
+                        password2: password2,
+                        recaptcha_response: recaptchaResponse,
+                        csrfToken: csrfToken
+                    },
+                    success: function (response) {
+                        // Handle success response
+                        const form_ele = document.getElementById("messageBox");
+                        if (response.message) {
+
+                            form_ele.innerHTML = `<div class="alert alert-success text-center" role="alert">
+                                <label class="mb-0"> ${response.message}</label>
+                            </div>` ;
+
+                            setTimeout(() => {
+                                window.location.href = "{% url 'home' %}"; 
+                            }, 3000);
+
+                        } else {
+
+                            form_ele.innerHTML = `<div class="alert alert-danger text-center" role="alert">
+                                    <label class="mb-0"> ${response.error}</label>
+                                </div>` ;
+
+                        }
+
+
+                    },
+                    beforeSend: function(xhr){
+                        const form_ele = document.getElementById("messageBox");
+                            form_ele.innerHTML = `<div class="alert alert-success text-center" role="alert">
+                                <label class="mb-0">Creating Account...</label>
+                            </div>` ;
+                    }
+
+
+                });
+            });
+        });
+
+    </script>
 
     <!-- The popup window -->
     <div class="popup" id="popup">
@@ -240,6 +363,31 @@
     </div>
 
     "{% include 'footer.html' %}"
+
+    <script>
+
+        // Get the elements for password visibility toggle
+        const togglePassword1 = document.getElementById('togglePassword1');
+        const passwordField1 = document.getElementById('password1');
+
+        const togglePassword2 = document.getElementById('togglePassword2');
+        const passwordField2 = document.getElementById('password2');
+
+        // Add event listeners to toggle password visibility
+        togglePassword1.addEventListener('click', function () {
+            const type = passwordField1.type === 'password' ? 'text' : 'password';
+            passwordField1.type = type;
+            togglePassword1.textContent = type === 'password' ? '👁️' : '🙈'; // Change icon
+        });
+
+        togglePassword2.addEventListener('click', function () {
+            const type = passwordField2.type === 'password' ? 'text' : 'password';
+            passwordField2.type = type;
+            togglePassword2.textContent = type === 'password' ? '👁️' : '🙈'; // Change icon
+        });
+
+
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.4.1.js"
         integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>

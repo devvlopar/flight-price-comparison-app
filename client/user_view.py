@@ -3,12 +3,16 @@ from django.shortcuts import render, redirect
 from .decorators import login_is_required
 from django.contrib.auth.hashers import check_password, make_password
 from django.conf import settings
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 import requests
+from django.http import JsonResponse
 
 #helper function
 def create_user(validated_data):
+    global user_data 
     # hash the password 
-    hashed_password = make_password(validated_data['password'])
+    hashed_password = make_password(validated_data['password1'])
 
     # create user in the db
     user = UserData(
@@ -20,6 +24,7 @@ def create_user(validated_data):
         confirm_password=hashed_password
     )
     user.save()
+    user_data = user
     return user
 
 def register_view(request):
@@ -30,17 +35,18 @@ def register_view(request):
         # Check if email already exists
         
         if UserData.objects.filter(email=data['email']).exists():
-            return render(request,'register.html', {'message' : "A user with this email already exists."})
+            return JsonResponse({'error' : "An account exists with these details. Please go to the login page."})
         
-        if data['password'] != data['confirm_password']:
-            return render(request, 'register.html', {'message' : "Passwords must match."})
+        if data['password1'] != data['password2']:
+            return JsonResponse({'error' : "Both passwords must match."})
         
         # Check if email and confirm_email match
         if data['email'] != data['confirm_email']:
-            return render(request, 'register.html', {'message' : "Email addresses must match."})
+            return JsonResponse({'error' : "Email addresses must match."})
         
         #validate google captcha
-        captcha_data = data.get('g-recaptcha-response')
+       
+        captcha_data = data.get('recaptcha_response')
         url = 'https://www.google.com/recaptcha/api/siteverify'
         captcha_data = {
             'secret': settings.RECAPTCHA_PRIVATE_KEY,
@@ -49,12 +55,27 @@ def register_view(request):
         captcha_response = requests.post(url, data=captcha_data)
         result = captcha_response.json()
         if not result.get('success'):
-            return render(request, 'register.html', {'message': "Invalid reCAPTCHA. Please try again."})
+            return JsonResponse({'error': "Invalid reCAPTCHA. Please try again."})
         
         #calling the function to create user in db
         create_user(data)
+        
+        #just starting the session
+        # request.session['user_id'] = user_data.id
+        # request.session['user_email'] = user_data.email
+        
+        
+        #send welcome email
+        subject = "Welcome to FlightChkr.com!"
+        message = render_to_string('registration/register_email_body.html', {
+            'user': user_data,
+            'url': settings.SITE_URL + '/login/'
+            
+        })
+        send_mail(subject, 'This is a plain text body in case the email client does not support HTML', settings.EMAIL_HOST_USER, [user_data.email], html_message=message)
 
-        return render(request, 'register.html', {'message': "Account Created Successfully!"})
+
+        return JsonResponse({'message': "Thank you. Your account was created successfully!"})
       
 
 

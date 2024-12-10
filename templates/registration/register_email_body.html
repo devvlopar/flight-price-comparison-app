@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Reset</title>
+    <title>Welcome to FlightChkr.com</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -64,21 +64,21 @@
 <body>
     <div class="container">
         <div class="logo">
+            <!-- Replace with your logo image URL -->
             <img src="{% static 'images/dark_logo.png' %}" alt="FlightChkr Logo">
         </div>
-        
         <div class="message">
             <p>Hi {{user.first_name}},</p>
-            <p>We received a request to reset the password for your FlightChkr.com account associated with <strong>{{user.email}}</strong>.</p>
-            <p>No changes have been made to your account yet.</p>
-            <p>You can reset your password by clicking the link below:</p>
+            <p>Welcome to FlightChkr.com!</p>
+            <p>You’re now part of a growing community of people interested in better flight deals.</p>
+            <p>If you have any questions, our support team is here to help: <a href="mailto:support@flightchkr.com">support@flightchkr.com</a> or simply reply to this email.</p>
         </div>
         <div class="button">
-            <a href="{{reset_link}}">Reset your password</a>
+            <!-- Replace 'login_link_here' with your actual login page URL -->
+        <a href="{{url}}">Log in now</a>
         </div>
         <div class="message">
-            <p><small>(This link expires after 30 minutes.)</small></p>
-            <p>If you did not request a new password, please let us know immediately by replying to this email.</p>
+            <p>More features are coming. We’ll keep you posted.</p>
         </div>
         <div class="footer">
             <p>Best regards,</p>

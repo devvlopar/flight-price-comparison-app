@@ -26,7 +26,7 @@ def send_reset_email(user):
         'user': user,
         'reset_link': reset_link,
     })
-    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
+    send_mail(subject, 'This is a plain text body in case the email client does not support HTML', settings.EMAIL_HOST_USER, [user.email], html_message=message)
 
 def request_reset_password(request):
     if request.method == "POST":
@@ -40,25 +40,26 @@ def request_reset_password(request):
     return render(request, 'forgot_password.html')
 
 def reset_password_confirm(request, uidb64, token, timestamp):
-    try:
-        # Decode user ID from URL
-        uid = urlsafe_base64_decode(uidb64).decode()
-        user = UserData.objects.get(id=uid)
+    # try:
+    # Decode user ID from URL
+    uid = urlsafe_base64_decode(uidb64).decode()
+    user = UserData.objects.get(id=uid)
 
-        # Validate token and expiration
-        if token_generator.check_token(user, token):
-            if not is_token_expired(int(timestamp)):
-                if request.method == "POST":
-                    # Allow user to reset the password
-                    new_password = request.POST.get('password')
-                    user.password = make_password(new_password)  
-                    user.save()
-                    return JsonResponse({'updated': True})
-                return render(request, 'registration/password_reset_confirm.html', {'valid': True})
-            else:
-                return render(request, 'registration/password_reset_confirm.html', {'expired': True})
-    except (TypeError, ValueError, OverflowError, UserData.DoesNotExist):
-        return render(request, 'registration/password_reset_confirm.html', {'invalid': True})
+    # Validate token and expiration
+    if token_generator.check_token(user, token):
+        if not is_token_expired(int(timestamp)):
+            if request.method == "POST":
+                # Allow user to reset the password
+                new_password = request.POST.get('password')
+                user.password = make_password(new_password)  
+                user.save()
+                return JsonResponse({'updated': True})
+            print(uidb64, token, timestamp)
+            return render(request, 'registration/password_reset_confirm.html', {'valid': True, 'uidb64':str(uidb64), 'token':token, 'timestamp':timestamp})
+        else:
+            return render(request, 'registration/password_reset_confirm.html', {'expired': True})
+    # except (TypeError, ValueError, OverflowError, UserData.DoesNotExist):
+    #     return render(request, 'registration/password_reset_confirm.html', {'invalid': True})
 
 
 # views.py
