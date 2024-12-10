@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^h1@_$ju_2=lqz1$0-5-rugx%u8)ppioe7=#to=$e6-&*3xqi='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -81,9 +81,9 @@ WSGI_APPLICATION = 'flightanalysis.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'flightchkr_newflightchecker',
-        'USER': 'flightchkr_devang',
-        'PASSWORD': 'f.Cp1xONdNJE',
+        'NAME': 'flightchecker',
+        'USER': 'root',
+        'PASSWORD': 'python',
         'HOST': 'localhost',
         'PORT': '3306'
     }

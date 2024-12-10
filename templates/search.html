@@ -159,7 +159,7 @@
                 </div>
                     <div class="search-grid">
                         <div class="form-group mb-0">
-                            <label>from</label>
+                            <label>From</label>
                             <div class="w-100 position-relative ">
                                 <input type="text" name="Origin" id="inputOrigin" class="form-control"
                                     placeholder="From" required autofocus>
@@ -198,7 +198,7 @@
                             <label>Return</label>
                             <div class="date position-relative date-icons">
                                 <input type="date" name="Returndate" id="return" class="form-control custom-date"
-                                    placeholder="Return Date" required>
+                                    placeholder="Return Date" >
                                     <div class=date-svg-icons>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16"><path fill="#000000" d="M14.5 16h-13C.67 16 0 15.33 0 14.5v-12C0 1.67.67 1 1.5 1h13c.83 0 1.5.67 1.5 1.5v12c0 .83-.67 1.5-1.5 1.5M1.5 2c-.28 0-.5.22-.5.5v12c0 .28.22.5.5.5h13c.28 0 .5-.22.5-.5v-12c0-.28-.22-.5-.5-.5z"/><path fill="#000000" d="M4.5 4c-.28 0-.5-.22-.5-.5v-3c0-.28.22-.5.5-.5s.5.22.5.5v3c0 .28-.22.5-.5.5m7 0c-.28 0-.5-.22-.5-.5v-3c0-.28.22-.5.5-.5s.5.22.5.5v3c0 .28-.22.5-.5.5m4 2H.5C.22 6 0 5.78 0 5.5S.22 5 .5 5h15c.28 0 .5.22.5.5s-.22.5-.5.5"/></svg>
                                     </div>
@@ -211,7 +211,7 @@
                 </form>
             </div>
             <span class="mt-3 d-block text-18 text-gray">
-                Flights from American Airlines, Delta and British Airways are currently unavailable.
+                Flights from American Airlines, Delta and British Airways, as well as code-share flights operated by these airlines are currently unavailable.
             </span>
         </div>
     </section>
@@ -275,6 +275,9 @@
     {% include 'footer.html' %}
 
     <script>
+        $("input[type='text'], input[type='date']").on("focus", function () {
+            $(this).val(''); // Clear the current content
+        });
         // Check for changes to radio buttons and handle the Return field
         $("input[name='select-radio']").on("change", function () {
             if ($("#one-way").prop("checked")) {

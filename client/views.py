@@ -121,7 +121,7 @@ def search_flight_view(request):
             existing_entry.user = user
             existing_entry.save()
             current_search_id = existing_entry.search_id
-        except SearchHistory.DoesNotExist:
+        except :
             if not return_date:
                 s1 = SearchHistory(
                     user = user,
