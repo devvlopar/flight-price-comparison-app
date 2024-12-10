@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'flightchecker',
         'USER': 'root',
-        'PASSWORD': 'python',
+        'PASSWORD': '123',
         'HOST': 'localhost',
         'PORT': '3306'
     }
@@ -157,3 +157,17 @@ SESSION_COOKIE_AGE = 3600
 IP_STACK_KEY = "8f6fc44857e5c9cbfcef1ca55497298c"
 
 PASSWORD_RESET_TIMEOUT = 1800
+
+
+
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'devvappgenix@gmail.com'
+EMAIL_HOST_PASSWORD = "lbvqqfukzsvkjven"
+
+SITE_URL = "http://127.0.0.1:8000"

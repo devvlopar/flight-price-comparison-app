@@ -3,6 +3,7 @@ from .views import support_view, about_view, search_flight_view, get_flight_data
 from .user_view import *
 from .client_object import origin_airport_search_view, home_page, destination_airport_search_view, get_airport
 from .on import add_data
+from client import password_view
 
 urlpatterns = [
     path("", home_page, name='home'),
@@ -21,6 +22,11 @@ urlpatterns = [
     path("get_airport/", get_airport, name= 'get_airport'),
     
 
-    path("prev_search/<str:sid>", prev_search_view, name="prev_search")
+    path("prev_search/<str:sid>", prev_search_view, name="prev_search"),
+     path('reset_password/', password_view.request_reset_password, name='reset_password'),
+    path('reset_password/done/', password_view.password_reset_done, name='password_reset_done'),
+    path('reset/<uidb64>/<token>/<timestamp>/', password_view.reset_password_confirm, name='password_reset_confirm'),
+    path('reset_password_complete/', password_view.password_reset_complete, name='password_reset_complete'),
+    path('reset_password_invalid/', password_view.password_reset_invalid, name='password_reset_invalid'),
     
 ]
