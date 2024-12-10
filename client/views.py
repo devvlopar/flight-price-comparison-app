@@ -54,9 +54,9 @@ def rank_cheapest_flight(cheapest_flight_price, first_price, third_price):
     if cheapest_flight_price_to_number < first_price_to_number:
         return 'A GOOD DEAL'
     elif cheapest_flight_price_to_number > third_price_to_number:
-        return 'AT RELATIVELY HIGHER COST'
+        return 'HIGH'
     else:
-        return 'AT TYPICAL COST'
+        return 'AVERAGE'
 
 
 def is_cheapest_flight_out_of_range(cheapest_flight_price, metrics):
@@ -73,7 +73,7 @@ def get_flight_offers(**kwargs):
     print('before API')
     search_flights = amadeus_client.shopping.flight_offers_search.get(**kwargs)
     flight_offers = []
-   
+    
     # print(search_flights.data)
     for flight in search_flights.data:
         offer = Flight(flight).construct_flights()
@@ -191,7 +191,12 @@ def search_flight_view(request):
         flight_offers = get_flight_offers(**kwargs)
         cheapest_flight=get_cheapest_flight_price(flight_offers)
         is_good_deal = rank_cheapest_flight(cheapest_flight, metrics['first'], metrics['third'])
+        deals_dict = {'A GOOD DEAL' : "Immediate booking is recommended. Register to view flight and price check details.",
+                      'HIGH' : "Consider waiting to book. Register to view flight and price check details.",
+                      'AVERAGE' : "Consider waiting to book. Register to view flight and price check details."}
+        
         if not flight_offers:
+            print(flight_offers)
             return render(request, 'results_without_login.html', {'is_good_deal': False})
         print(is_good_deal)
         context = {'origin': origin,
@@ -201,7 +206,8 @@ def search_flight_view(request):
             'isOneWay': bool(return_date),
             'adults': 1,
             'cabin_class': cabin_class,
-            'is_good_deal': is_good_deal
+            'is_good_deal': is_good_deal,
+            'deal_message': deals_dict.get(is_good_deal)
             }
         # return render(request, 'results_test.html')
         return render(request, 'results_without_login.html', context)

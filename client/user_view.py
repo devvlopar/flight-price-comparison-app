@@ -37,7 +37,7 @@ def register_view(request):
         
         # Check if email and confirm_email match
         if data['email'] != data['confirm_email']:
-            return render(request, 'register.html', {'message' : "Emails must match."})
+            return render(request, 'register.html', {'message' : "Email addresses must match."})
         
         #validate google captcha
         captcha_data = data.get('g-recaptcha-response')

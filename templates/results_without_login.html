@@ -42,26 +42,38 @@
                                 <h3 class="mb-3 text-black">
                                     Analysis:
                                 </h3>
-                                 {% if not is_good_deal%}
-                                <p class="mb-3 font-weight-midd text-20 text-gray">
-                                    No flights are available on our system: <br>Flights from American Airlines, Delta and British Airways are currently unavailable.
-                                </p>
-                                {% elif is_good_deal == "nometrics" %}
+                                 
+                                {% if is_good_deal == "nometrics" %}
                                 
                                 <p class="mb-3 font-weight-midd text-20 text-gray">
                                    Price metrics are not available for this trip.
                                 </p>
                                 
-                                {% else %}
+                                {% endif %}
                                 
+                                {% if is_good_deal == "A GOOD DEAL" %}
                                 <p class="mb-3 font-weight-midd text-20 text-gray">
                                     The cheapest flight price is <span class="d-block-inline good-deal-text h5">{{ is_good_deal }}</span>
                                 </p>
                                 <p class="mb-3 font-weight-midd text-20 text-gray">
-                                    Immediate booking is recommended. Register to view
-                                    flight and price check details.
+                                    {{deal_message}}
                                 </p>
-                                {% endif %} 
+                                {% elif is_good_deal == "HIGH" %}
+                                <p class="mb-3 font-weight-midd text-20 text-gray">
+                                    The cheapest flight price is <span class="d-block-inline high-deal-text h5">{{ is_good_deal }}</span>
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray">
+                                    {{deal_message}}
+                                </p>
+                                {% elif is_good_deal == "AVERAGE" %}
+                                <p class="mb-3 font-weight-midd text-20 text-gray">
+                                    The cheapest flight price is <span class="d-block-inline average-deal-text h5">{{ is_good_deal }}</span>
+                                </p>
+                                <p class="mb-3 font-weight-midd text-20 text-gray">
+                                    {{deal_message}}
+                                </p>
+
+                                {%  endif %}
                                 <a href="{% url 'login' %}" >
                                 <button type="button" class="ct-btn-primary mt-4">  
                                     Login/Register Free

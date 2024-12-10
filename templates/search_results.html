@@ -534,10 +534,19 @@
                             }
                         });
                         
+                        employees.setAttribute('disabled', true);
 
                         const firstP = document.getElementById("isAGoodDeal");
+                        if(isGoodDeal == 'HIGH'){
+                            firstP.innerHTML = `The cheapest Available fight is <span class="d-block-inline text-red h5">${isGoodDeal}
+                            </span>`;
+                        } else if (isGoodDeal == 'AVERAGE'){
+                            firstP.innerHTML = `The cheapest Available fight is <span class="d-block-inline text-orange h5">${isGoodDeal}
+                            </span>`;
+                        } else {
                         firstP.innerHTML = `The cheapest Available fight is <span class="d-block-inline text-light-blue h5">${isGoodDeal}
                                     </span>`;
+                                };
 
                         const secondP = document.getElementById("secondP");
                         secondP.innerHTML = `The Least expensive flights usually cost between <br> ${currencySymbol} ${first} - ${currencySymbol} ${third}`;

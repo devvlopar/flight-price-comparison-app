@@ -410,6 +410,14 @@ input:focus {
 .good-deal-text {
   color: #38ab22 !important;
 }
+
+.high-deal-text {
+  color: red !important;
+}
+
+.average-deal-text{
+  color : orange !important;
+}
 /* new-search-content */
 .new-search-content {
   background-color: #1c7ce2;
@@ -423,11 +431,19 @@ input:focus {
   margin-bottom: 10px;
   color: #fff;
 }
+.required {
+  padding-left: 4px;
+  color: red;
+  font-weight: bold;
+}
 .text-red {
   color: #8e2523;
 }
 .text-light-blue {
   color: #73b5ce;
+}
+.text-orange {
+  color: orange;
 }
 .departure-box .departure-img {
   width: 120px;
