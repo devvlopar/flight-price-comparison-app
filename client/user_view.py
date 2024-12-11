@@ -69,7 +69,8 @@ def register_view(request):
         subject = "Welcome to FlightChkr.com!"
         message = render_to_string('registration/register_email_body.html', {
             'user': user_data,
-            'url': settings.SITE_URL + '/login/'
+            'url': settings.SITE_URL + '/login/',
+            'logo': settings.SITE_URL + '/' + settings.STATIC_URL + 'images/dark_logo.png'
             
         })
         send_mail(subject, 'This is a plain text body in case the email client does not support HTML', settings.EMAIL_HOST_USER, [user_data.email], html_message=message)

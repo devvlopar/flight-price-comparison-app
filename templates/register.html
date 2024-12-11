@@ -276,9 +276,9 @@
                                 <label class="mb-0"> ${response.message}</label>
                             </div>` ;
 
-                            setTimeout(() => {
-                                window.location.href = "{% url 'home' %}"; 
-                            }, 3000);
+                            /* setTimeout(() => {
+                                window.location.href = "{% url 'home' %}";
+                            }, 3000); */
 
                         } else {
 
@@ -286,15 +286,19 @@
                                     <label class="mb-0"> ${response.error}</label>
                                 </div>` ;
 
-                        }
+                        };
+
+                        //scroll to top
+                        $('html, body').animate({ scrollTop: 0 }, 'slow');
 
 
                     },
-                    beforeSend: function(xhr){
+                    beforeSend: function (xhr) {
                         const form_ele = document.getElementById("messageBox");
-                            form_ele.innerHTML = `<div class="alert alert-success text-center" role="alert">
+                        form_ele.innerHTML = `<div class="alert alert-success text-center" role="alert">
                                 <label class="mb-0">Creating Account...</label>
                             </div>` ;
+                        
                     }
 
 

@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'flightchecker',
         'USER': 'root',
-        'PASSWORD': '123',
+        'PASSWORD': 'python',
         'HOST': 'localhost',
         'PORT': '3306'
     }
