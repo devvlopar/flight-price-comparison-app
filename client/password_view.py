@@ -25,6 +25,7 @@ def send_reset_email(user):
     message = render_to_string('registration/password_reset_email.html', {
         'user': user,
         'reset_link': reset_link,
+        'logo' : "http://flightchkr.com/static/images/dark_logo.png"
     })
     send_mail(subject, 'This is a plain text body in case the email client does not support HTML', settings.EMAIL_HOST_USER, [user.email], html_message=message)
 

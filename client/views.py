@@ -11,12 +11,11 @@ from django.http import HttpResponse, JsonResponse
 
 from .flight import Flight
 from .metrics import Metrics
-from dotenv import load_dotenv
+
 import os
 
 # Create your views here.
 
-load_dotenv()
 amadeus_client = Client(
     client_id="r4ihA5Hkomz2KstBmQjD3AaeLAZU0IQF",
     client_secret="T0S0QakCI3AXmeuT",

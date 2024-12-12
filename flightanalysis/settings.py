@@ -170,7 +170,6 @@ PASSWORD_RESET_TIMEOUT = 1800
 # EMAIL_HOST_USER = 'devvappgenix@gmail.com'
 # EMAIL_HOST_PASSWORD = "lbvqqfukzsvkjven"
 
-SITE_URL = "http://127.0.0.1:8000"
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -181,3 +180,6 @@ EMAIL_USE_SSL = True  # Set to True if you're using SSL instead of TLS
 EMAIL_HOST_USER = 'admin@flightchkr.com'  # The email account you want to send from
 EMAIL_HOST_PASSWORD = 'c%NT+pQjJ8S@uGH'  # The password for the email account
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Default "from" address for emails
+
+
+SITE_URL = "http://flightchkr.com"

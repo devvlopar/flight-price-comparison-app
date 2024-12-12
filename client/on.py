@@ -10,3 +10,6 @@ def add_data(request):
     to_update = ["icao","iata","name","city","state","country","elevation","lat","lon","tz"]
     Airports.objects.bulk_create(instances)
     return HttpResponse("done")
+
+
+

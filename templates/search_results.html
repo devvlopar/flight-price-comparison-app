@@ -132,6 +132,7 @@
             const returnDate = "{{ return_date }}";
             const travelClass = "{{ cabin_class }}";
             const direct_flights_not_available = "{{direct_flights_not_available}}";
+            
             {% if nonStop == True or nonStop == 'true' %}
 
             const nonStop = "true";
@@ -456,8 +457,8 @@
 
                     } else {
                         console.log('no flights-------------------', direct_flights_not_available);
-                        if (direct_flights_not_available){
-                            resultsContainer.innerHTML = `<h3>Flights:<h3><br>${direct_flights_not_available}`;
+                        if (nonStop == "true"){
+                            resultsContainer.innerHTML = `<h3>Flights:<h3><br><p>There are no direct flights available for this route.</p>`;
                         } else {
                             resultsContainer.innerHTML = '<h3>Flights:<h3><br>No flights are available on our system: <br>Flights from American Airlines, Delta and British Airways are currently unavailable.';
                         }

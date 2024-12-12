@@ -69,12 +69,14 @@ def register_view(request):
         
         #send welcome email
         subject = "Welcome to FlightChkr.com!"
+        logourl = settings.SITE_URL + settings.STATIC_URL + 'images/dark_logo.png'
         message = render_to_string('registration/register_email_body.html', {
             'user': user_data,
             'url': settings.SITE_URL + '/login/',
-            'logo': settings.SITE_URL + '/' + settings.STATIC_URL + 'images/dark_logo.png'
+            'logo': "http://flightchkr.com/static/images/dark_logo.png"
             
         })
+        print(logourl)
         send_mail(subject, 'This is a plain text body in case the email client does not support HTML', settings.EMAIL_HOST_USER, [user_data.email], html_message=message)
 
 
