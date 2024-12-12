@@ -102,18 +102,30 @@ def get_flight_price_metrics(**kwargs_metrics):
 
 
 def search_flight_view(request):
-    if not (request.POST.get('Origin') and request.POST.get('Destination') and request.POST.get('Departuredate')):
-        return redirect('home')
-    origin = request.POST.get('Origin').split(' - ')[0][-3:]
-    destination = request.POST.get('Destination').split(' - ')[0][-3:]
-    departure_date = request.POST.get('Departuredate')
-    return_date = request.POST.get('Returndate')
-    cabin_class = request.POST.get('Cabinclass')
-    direct_flight ="true" if request.POST.get('directFlights') == "on" else "false"
+    data_dict = request.session.pop('custom_data', {})
+    print(data_dict)
+    if(data_dict):
+        origin = data_dict.get('origin').split(' - ')[0][-3:]
+        destination = data_dict.get('destination').split(' - ')[0][-3:]
+        departure_date = data_dict.get('departureDate')
+        return_date = data_dict.get('returnDate')
+        cabin_class = data_dict.get('cabin_class')
+        direct_flight = data_dict.get('directFlight')
+    else:
+        origin = request.POST.get('Origin').split(' - ')[0][-3:]
+        destination = request.POST.get('Destination').split(' - ')[0][-3:]
+        departure_date = request.POST.get('Departuredate')
+        return_date = request.POST.get('Returndate')
+        cabin_class = request.POST.get('Cabinclass')
+        direct_flight ="true" if request.POST.get('directFlights') == "on" else "false"
+        
+        
+    
     
     
     
     if request.session.get('user_email'):
+        
         user = UserData.objects.get(email = request.session.get('user_email'))
         context ={'first_name' : user.first_name,
                             'last_name' : user.last_name,
@@ -125,8 +137,8 @@ def search_flight_view(request):
         current_search_id = None
         try:
             existing_entry = SearchHistory.objects.get(user=user,
-            origin_location=request.POST.get('Origin'),
-            destination_location=request.POST.get('Destination'))
+            origin_location=request.POST.get('Origin') if request.POST.get('Origin') else origin,
+            destination_location=request.POST.get('Destination') if request.POST.get('Destination') else destination)
             existing_entry.user = user
             existing_entry.save()
             current_search_id = existing_entry.search_id
@@ -134,8 +146,8 @@ def search_flight_view(request):
             if not return_date:
                 s1 = SearchHistory(
                     user = user,
-                    origin_location = request.POST.get('Origin'),
-                    destination_location = request.POST.get('Destination'),
+                    origin_location = request.POST.get('Origin') if  request.POST.get('Origin') else origin,
+                    destination_location = request.POST.get('Destination') if request.POST.get('Destination') else destination,
                     travel_class = cabin_class,
                     from_date = departure_date,
                     is_one_way = not bool(return_date),
@@ -145,8 +157,8 @@ def search_flight_view(request):
             else:
                 s1 = SearchHistory(
                     user = user,
-                    origin_location = request.POST.get('Origin'),
-                    destination_location = request.POST.get('Destination'),
+                    origin_location = request.POST.get('Origin') if  request.POST.get('Origin') else origin,
+                    destination_location = request.POST.get('Destination') if request.POST.get('Destination') else destination,
                     travel_class = cabin_class,
                     from_date = departure_date,
                     is_one_way = not bool(return_date),
@@ -169,6 +181,8 @@ def search_flight_view(request):
             'search_id' : current_search_id,
             'nonStop' : direct_flight
             }
+        if (data_dict.get('killit') == "yesyes" or request.POST.get('killit') == "yesyes"):
+            context.update({'killit':"yesyes"})
         # return render(request, 'results_test.html', context)
         return render(request, 'search_results.html', context)
     else:
@@ -207,18 +221,19 @@ def search_flight_view(request):
                       'AVERAGE' : "Consider waiting to book. Register to view flight and price check details."}
         
         if not flight_offers:
-            print(flight_offers)
+            # print(flight_offers)
             return render(request, 'results_without_login.html', {'is_good_deal': False})
         print(is_good_deal)
-        context = {'origin': origin,
-            'destination': destination,
+        context = {'origin': request.POST.get('Origin'),
+            'destination': request.POST.get('Destination'),
             'departure_date': departure_date,
             'return_date': return_date,
-            'isOneWay': bool(return_date),
+            'isOneWay': str(not bool(return_date)).lower(),
             'adults': 1,
             'cabin_class': cabin_class,
             'is_good_deal': is_good_deal,
-            'deal_message': deals_dict.get(is_good_deal)
+            'deal_message': deals_dict.get(is_good_deal),
+            'nonStop' : direct_flight
             }
         # return render(request, 'results_test.html')
         return render(request, 'results_without_login.html', context)

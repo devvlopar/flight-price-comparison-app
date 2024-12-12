@@ -457,3 +457,23 @@ const finalDocument = document.getElementById("price-slider");
                 });
             }
         </script>
+
+
+
+// logic for showing past entries
+const l1 = searchHistory.slice(-2).reverse();
+let s1 = ``;
+for (let i = 0; i < l1.length; i++) {
+    
+    if(l1[i].returnDate){
+    s1 += `<p class="result-text" style="color: black; font-weight: bold; margin: 10px 0;">
+            ${l1[i].origin} -> ${l1[i].destination} ${l1[i].departureDate} - Return ${l1[i].returnDate} - ${l1[i].cabinClass}
+        </p>`
+    } else {
+    s1 += `<p class="result-text" style="color: black; font-weight: bold; margin: 10px 0;">
+        ${l1[i].origin} -> ${l1[i].destination} ${l1[i].departureDate} - Oneway - ${l1[i].cabinClass}
+    </p>`
+    }
+}
+const bBox = $("#blueBox");
+bBox.html(s1);

@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
-import requests
+import requests, json
 from django.http import JsonResponse
 
 #helper function
@@ -28,6 +28,8 @@ def create_user(validated_data):
     return user
 
 def register_view(request):
+    if request.session.get('user_email'):
+        return redirect('home')
     if request.method =='GET':
         return render(request, 'register.html')
     else:
@@ -61,8 +63,8 @@ def register_view(request):
         create_user(data)
         
         #just starting the session
-        # request.session['user_id'] = user_data.id
-        # request.session['user_email'] = user_data.email
+        request.session['user_id'] = user_data.id
+        request.session['user_email'] = user_data.email
         
         
         #send welcome email
@@ -76,7 +78,7 @@ def register_view(request):
         send_mail(subject, 'This is a plain text body in case the email client does not support HTML', settings.EMAIL_HOST_USER, [user_data.email], html_message=message)
 
 
-        return JsonResponse({'message': "Thank you. Your account was created successfully!"})
+        return JsonResponse({'message': "Thank you. Your account was created successfully! You have also been logged in."})
       
 
 
@@ -90,6 +92,7 @@ def login_view(request):
         if request.method == 'GET':
             return render(request, 'login.html')
         elif request.method == 'POST':
+            
             user_email = request.POST.get('user_email')
             
             #validate google captcha
@@ -115,7 +118,17 @@ def login_view(request):
             if check_password(user_pass, user.password):
                 request.session['user_id'] = user.id
                 request.session['user_email'] = user.email
-                return redirect('home')
+                json_data = request.POST.get('non_auth_data')
+                print(json_data)
+                if json_data:
+                    d = json.loads(json_data)
+                    #other function
+                    request.session['custom_data'] = d
+                    request.session['custom_data'].update({'killit' : "yesyes"})
+                    return redirect('search_flight')                     
+                else:
+                    
+                    return redirect('home')
             else:
                 return render(request, 'login.html', {'error': 'Invalid Password'})
         else:

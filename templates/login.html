@@ -14,7 +14,7 @@
     <title>Flight Checker: Login</title>
     <style>
         .required {
-            color:  red;
+            color: red;
             font-weight: bold;
         }
     </style>
@@ -45,32 +45,39 @@
                             {% if error %}
                             <div class="show-alert-data">
                                 <div class="alert alert-danger text-center" role="alert">
-                                   {{error}}
-                                  </div>
+                                    {{error}}
+                                </div>
                             </div>
                             {% endif %}
 
 
-                             <form class="w-100" action="{% url 'login' %}" method="post">
+                            <form class="w-100" action="{% url 'login' %}" method="post">
                                 {% csrf_token %}
                                 <div class="form-group d-flex align-items-center ">
                                     <label class="mb-0">Email Address</label>
-                                    <input type="email" name="user_email" class="form-control" placeholder="Enter email address" required>
+                                    <input type="email" name="user_email" class="form-control"
+                                        placeholder="Enter email address" required>
                                     <span class="required"> *</span>
                                 </div>
                                 <div class="form-group d-flex align-items-center mb-3">
                                     <label class="mb-0">Password</label>
-                                    <input type="password" name="user_password" placeholder="Enter password" class="form-control" required>
+                                    <input type="password" name="user_password" placeholder="Enter password"
+                                        class="form-control" required>
                                     <span class="required"> *</span>
                                 </div>
                                 <div class="w-100">
-                                    <a href="{% url 'forgot_password' %}" class="w-100 text-right d-block">Forgot Password?</a>
+                                    <a href="{% url 'forgot_password' %}" class="w-100 text-right d-block">Forgot
+                                        Password?</a>
                                 </div>
+                                <input type="hidden" name="non_auth_data" id="non_auth_data">
 
-                                <div class="g-recaptcha form-group d-flex align-items-left" data-sitekey="6LcfU4sqAAAAAPO5Zu94gVWjiuVU87oyOaexTAoa"></div>
+                                <div class="g-recaptcha form-group d-flex align-items-left"
+                                    data-sitekey="6LcfU4sqAAAAAPO5Zu94gVWjiuVU87oyOaexTAoa"></div>
 
-                                <div class="w-100 mt-5 d-flex justify-content-between align-items-center flex-sm-row flex-column">
-                                    <span><a>Don't have an account?  </a> <a href="{% url 'register' %}" >Create an Account</a> </span>
+                                <div
+                                    class="w-100 mt-5 d-flex justify-content-between align-items-center flex-sm-row flex-column">
+                                    <span><a>Don't have an account? </a> <a href="{% url 'register' %}">Create an
+                                            Account</a> </span>
                                     <button type="submit" class="ct-btn-register">Login</button>
                                 </div>
                             </form>
@@ -92,6 +99,31 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            
+            console.log("QWERTYUIOP");
+            let ss = localStorage.getItem("searchHistory");
+            let keyCondition = localStorage.getItem("continueSearch");
+            console.log(keyCondition, ss);
+
+            if (keyCondition == "yesyes"){
+                let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+                let currentData = searchHistory[searchHistory.length -1];
+                const i1 = $("#non_auth_data");
+                i1.val(JSON.stringify(currentData));
+                
+
+                console.log("QWERTYUIOP");
+                
+            }
+
+
+        })
+    </script>
 
 </body>
 

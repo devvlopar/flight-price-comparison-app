@@ -79,6 +79,7 @@ input:focus {
   display: block;
   text-decoration: underline;
   margin-bottom: 30px;
+  display: inline-block;
 }
 .main-content-div {
   height: 100%;

@@ -126,9 +126,9 @@
     </section>
     <br>
 
-    <div class="container">
+    <div class="container login-title">
         <a href="{% url 'login' %}">
-            <h3 class="new-search-h ">Login Page</h3>
+            <h3 class="new-search-h "> Login Page</h3>
         </a>
     </div>
 
@@ -155,6 +155,7 @@
                         {% endif %}
                     </div>
 
+                    <div id="newForm">
 
                     <form class="w-100" id="myForm">
                         {% csrf_token %}
@@ -224,6 +225,9 @@
                             <button type="submit" id="submitButton" class="ct-btn-register">Register</button>
                         </div>
                     </form>
+
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -232,6 +236,11 @@
     <div class="overlay" id="overlay"></div>
 
     <script>
+
+        function contSearch(){
+            
+        }
+
         $(document).ready(function () {
             $('#myForm').on('submit', function (event) {
                 event.preventDefault(); // Prevent default form submission
@@ -268,17 +277,66 @@
                         csrfToken: csrfToken
                     },
                     success: function (response) {
+                        const csrfToken = '{{ csrf_token }}';
                         // Handle success response
                         const form_ele = document.getElementById("messageBox");
                         if (response.message) {
 
-                            form_ele.innerHTML = `<div class="alert alert-success text-center" role="alert">
-                                <label class="mb-0"> ${response.message}</label>
-                            </div>` ;
+                            const isCon = localStorage.getItem("continueSearch");
 
-                            /* setTimeout(() => {
-                                window.location.href = "{% url 'home' %}";
-                            }, 3000); */
+                            if (isCon == "yesyes"){
+                                let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+                                let currentData = searchHistory[searchHistory.length -1];
+                                if (currentData.directFlight == "true"){
+                                    currentData.directFlight = "on";
+                                }
+
+                                form_ele.innerHTML = `<div class="alert alert-success text-center" role="alert"><label class="mb-0"> ${response.message}</label></div>`;
+                                    
+                                const ans = localStorage.getItem("continueSearch");
+                                const mf = $('newForm'); //
+                                
+                                if(ans == "yesyes"){
+                            
+                                    const s1 = `
+                                    <div class="container">
+                                        <div id="messageBox" class="show-alert-data">
+                                            <div class="alert alert-success text-center p-4" role="alert">
+                                                <label class="mb-0">${response.message}</label>
+                                            </div>
+                                        </div>
+                                    
+                                        <form method="POST" action="/search_flight/" >
+                                            <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
+                                            <input type="hidden" name="Origin" value="${currentData.origin}">
+                                            <input type="hidden" name="Destination" value="${currentData.destination}">
+                                            <input type="hidden" name="Cabinclass" value="${currentData.cabin_class}">
+                                            <input type="hidden" name="Departuredate" value="${currentData.departureDate}">
+                                            <input type="hidden" name="Returndate" value="${currentData.returnDate}">
+                                            <input type="hidden" name="directFlights" value="${currentData.directFlight}">
+                                            <input type="hidden" name="killit" value="yesyes">
+                                            <button type="submit" class="ct-btn-primary mt-4 pl-5 pr-5 pt-3">Continue current search</button>
+                                        </form>
+                                    </div>
+                                    `;
+                                    
+                                    $('.register-form-section').html(s1);
+                                    $('.login-title').hide();
+                                    
+                                }
+                                
+
+                            } else {
+
+                            form_ele.innerHTML = `<div class="alert alert-success text-center" role="alert">
+                                <label class="mb-0"> ${response.message}</label>`
+
+                                console.log("-----------------1");
+                                setTimeout(() => {
+                                    window.location.href = "{% url 'home' %}";
+                                }, 3000);
+                                console.log("--------------------2");
+                            }
 
                         } else {
 
