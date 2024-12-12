@@ -163,11 +163,21 @@ PASSWORD_RESET_TIMEOUT = 1800
 
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'devvappgenix@gmail.com'
-EMAIL_HOST_PASSWORD = "lbvqqfukzsvkjven"
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'devvappgenix@gmail.com'
+# EMAIL_HOST_PASSWORD = "lbvqqfukzsvkjven"
 
 SITE_URL = "http://127.0.0.1:8000"
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.flightchkr.com'  # Use the domain for your cPanel mail server
+EMAIL_PORT = 465  # Use 587 for TLS, 465 for SSL, or 25 for non-secure (check with your hosting)
+
+EMAIL_USE_SSL = True  # Set to True if you're using SSL instead of TLS
+EMAIL_HOST_USER = 'admin@flightchkr.com'  # The email account you want to send from
+EMAIL_HOST_PASSWORD = 'c%NT+pQjJ8S@uGH'  # The password for the email account
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Default "from" address for emails

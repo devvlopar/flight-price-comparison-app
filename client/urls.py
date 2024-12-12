@@ -4,6 +4,7 @@ from .user_view import *
 from .client_object import origin_airport_search_view, home_page, destination_airport_search_view, get_airport
 from .on import add_data
 from client import password_view
+from .emailtest import emailtest
 
 urlpatterns = [
     path("", home_page, name='home'),
@@ -20,6 +21,7 @@ urlpatterns = [
     path("get_flight_data/", get_flight_data, name="get_flight_data"),
    
     path("get_airport/", get_airport, name= 'get_airport'),
+    # path('emailtest/', emailtest, name='emailtest'),
     
 
     path("prev_search/<str:sid>", prev_search_view, name="prev_search"),
