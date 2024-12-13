@@ -2,4 +2,4 @@
 __pycache__
 flightanalysis/
 myenv/
-settings.py
+**/settings.py
